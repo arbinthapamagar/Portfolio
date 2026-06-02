@@ -1,9 +1,9 @@
 import dotenv from 'dotenv';
 dotenv.config();
 
-import dbConnect from './db/index.js';
+import dbConnect from './src/db/index.js';
 import app from './app.js';
-import { uploadOnCloudinary } from './utils/cloudinary.js';
+import { uploadOnCloudinary } from './src/utils/cloudinary.js';
 
 const port = process.env.PORT || 8000;
 

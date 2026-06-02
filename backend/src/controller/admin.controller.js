@@ -4,14 +4,7 @@ import { asyncHandler } from '../utils/asyncHandler.js';
 import { apiError } from '../utils/apiError.js';
 import { apiResponse } from '../utils/apiResponse.js';
 import jwt from 'jsonwebtoken';
-import {
-  uploadOnCloudinary,
-  deleteFromCloudinary,
-} from '../utils/cloudinary.js';
-
-
-
-
+import { uploadOnCloudinary, deleteFromCloudinary } from '../utils/cloudinary.js';
 
 const generateAccessTokenAndRefreshToken = async (adminId) => {
     try {
@@ -153,18 +146,60 @@ const adminLogOut = asyncHandler(async (req, res) => {
         .json(new apiResponse(200, {}, 'Admin logged out successfully'));
 });
 
-
-
-// for avatar 
-const avatarController = asyncHandler(async(req,res)=>{
-    const avatar = req.body
+// for avatar
+const avatarController = asyncHandler(async (req, res) => {
+    const avatarPath = req.file?.path;
     if (!avatar) {
-        throw new apiError(400, )
-        
+        throw new apiError(400, ' Avatar is required !');
     }
+    const avatar = await uploadOnCloudinary(avatarPath);
+    if (!avatar) {
+        throw new apiError(400, ' avatar upload failed ');
+    }
+    let avatarDetails;
+    try {
+        avatarDetails = await Admin.create({
+            avatar: avatar.secure_url,
+            avatarId: avatar.public_id,
+        });
+    }
+     catch (error) {
+        if (avatar.public_id) {
+            await deleteFromCloudinary(avatar.public_id);
+            throw new apiError(500, 'Failed to create avatar ');
+        }
+    }
+    return res 
+    .status(201)
+    .json(
+        new apiResponse(
+            201,
+            avatarDetails,
+            "Avatar Created Successfullyin db "
+        )
+    )
+});
 
+
+// fetech the avatar
+
+
+const getAvatar = asyncHandler(async(req,res)=>{
+    const admin = await Admin.findById(req.params.id)
+    if(!admin){
+        throw new apiError(404, " avatar not found")
+
+    }
+    console.log('admin is : ===> ',admin)
+    return res
+    .status(200)
+    ,json(
+        new apiResponse(
+            201,
+            {avatar: admin.avatar},
+            'Avatar Fetched Successfully'
+        )
+    )
 })
 
-
-
-export {adminLogin,  refreshtokenController,adminLogOut}
+export { adminLogin, refreshtokenController, adminLogOut };

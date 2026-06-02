@@ -39,7 +39,7 @@ app.use(express.static('public'));
 app.use(cookieParser());
 
 //routes import here **************************
-import { adminRouter } from './routes/admin.route.js';
+import { adminRouter } from './src/routes/admin.route.js';
 
 // route decleration
 

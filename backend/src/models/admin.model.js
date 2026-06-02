@@ -40,6 +40,11 @@ const adminSchema = new mongoose.Schema(
             type: String,
             required: true,
         },
+        avatarId:{
+            required: true, 
+            type: String, 
+
+        }
     },
     { timestamps: true }
 );

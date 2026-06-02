@@ -24,3 +24,5 @@ const seedAdmin = asyncHandler(async () => {
   process.exit();
 });
 seedAdmin();
+
+export {seedAdmin}

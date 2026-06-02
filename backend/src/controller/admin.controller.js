@@ -23,7 +23,7 @@ const generateAccessTokenAndRefreshToken = async (adminId) => {
 };
 
 const adminLogin = asyncHandler(async (req, res) => {
-    const { email, password, phoneNumber } = req.body;
+    const { email, password, phoneNumber, confirmPassword } = req.body;
     if (!email || !password) {
         throw new apiError(400, ' all field are required ');
     }
@@ -45,34 +45,34 @@ const adminLogin = asyncHandler(async (req, res) => {
     if (confirmPassword !== password) {
         throw new apiError(400, ' Confirm password and password do not match. ');
     }
+
+    // if all good then send the token into the cookies
+
+    const { accessToken, refreshToken } = await generateAccessTokenAndRefreshToken(admin._id);
+
+    const loggedAdmin = await Admin.findById(admin._id).select('-password -refreshToken');
+
+    const option = {
+        httpOnly: true,
+        secure: true,
+    };
+
+    return res
+        .status(200)
+        .cookie('accessToken', accessToken, option)
+        .cookie('refreshToken', refreshToken, option)
+        .json(
+            new apiResponse(
+                200,
+                {
+                    admin: loggedAdmin,
+                    accessToken,
+                    refreshToken,
+                },
+                ' Admin Logged in successfully '
+            )
+        );
 });
-
-// if all good then send the token into the cookies
-
-const { accessToken, refreshToken } = await generateAccessTokenAndRefreshToken(admin._id);
-
-const loggedAdmin = await Admin.findById(admin._id).select('-password -refreshToken');
-
-const option = {
-    httpOnly: true,
-    secure: true,
-};
-
-return res
-    .status(200)
-    .cookie('accessToken', accessToken, option)
-    .cookie('refreshToken', refreshToken, option)
-    .json(
-        new apiResponse(
-            200,
-            {
-                admin: loggedAdmin,
-                accessToken,
-                refreshToken,
-            },
-            ' Admin Logged in successfully '
-        )
-    );
 
 //
 // refreshtoken rotation
@@ -147,9 +147,9 @@ const adminLogOut = asyncHandler(async (req, res) => {
 });
 
 // for avatar
-const avatarController = asyncHandler(async (req, res) => {
+const avatarUpload = asyncHandler(async (req, res) => {
     const avatarPath = req.file?.path;
-    if (!avatar) {
+    if (!avatarPath) {
         throw new apiError(400, ' Avatar is required !');
     }
     const avatar = await uploadOnCloudinary(avatarPath);
@@ -158,48 +158,108 @@ const avatarController = asyncHandler(async (req, res) => {
     }
     let avatarDetails;
     try {
-        avatarDetails = await Admin.create({
-            avatar: avatar.secure_url,
-            avatarId: avatar.public_id,
-        });
-    }
-     catch (error) {
+        avatarDetails = await Admin.findByIdAndUpdate(
+            req.admin._id,
+          { $set : { avatar: avatar.secure_url, avatarId: avatar.public_id}},
+          {new: true}
+           
+        ).select("avatar avatarId");
+    } catch (error) {
         if (avatar.public_id) {
             await deleteFromCloudinary(avatar.public_id);
             throw new apiError(500, 'Failed to create avatar ');
         }
     }
-    return res 
-    .status(201)
-    .json(
-        new apiResponse(
-            201,
-            avatarDetails,
-            "Avatar Created Successfullyin db "
-        )
-    )
+    return res
+        .status(201)
+        .json(new apiResponse(201, avatarDetails, 'Avatar Created Successfullyin db '));
 });
-
 
 // fetech the avatar
 
-
-const getAvatar = asyncHandler(async(req,res)=>{
-    const admin = await Admin.findById(req.params.id)
-    if(!admin){
-        throw new apiError(404, " avatar not found")
-
+const getAvatar = asyncHandler(async (req, res) => {
+    const admin = await Admin.findById(req.params.id);
+    if (!admin) {
+        throw new apiError(404, ' avatar not found');
     }
-    console.log('admin is : ===> ',admin)
+    console.log('admin is : ===> ', admin);
+    return res
+        .status(200)
+        .json(new apiResponse(201, { avatar: admin.avatar }, 'Avatar Fetched Successfully'));
+});
+
+//edit avatar
+const editAvatar = asyncHandler(async (req, res) => {
+    const avatar = await Admin.findById(req.params.id);
+    if (req.file) {
+        if (avatar.avatar) {
+            const public_id = avatar.public_id;
+            await deleteFromCloudinary(public_id);
+        }
+        //upload new
+
+        const cloudinaryResponse = await uploadOnCloudinary(req.file?.path);
+        console.log('cloudinaryResponse', cloudinaryResponse);
+        if (!cloudinaryResponse) {
+            throw new apiError(500, ' filed while uploading into cloudinary');
+        }
+
+        avatar.avatar = cloudinaryResponse.secure_url;
+        avatar.avatarId = cloudinaryResponse.public_id;
+
+        await avatar.save();
+        return res.status().json(new apiResponse(201, avatar, ' avatar updated successfully '));
+    }
+});
+
+//delete avatar ?
+
+const avatarDelete = asyncHandler(async (req, res) => {
+    const avatar = await Admin.findByIdAndDelete(req.params.id);
+    if (!avatar) {
+        throw new apiError(404, ' avatar not found ');
+    }
+
+    if (avatar.avatar) {
+        await deleteFromCloudinary(avatar.avatarId);
+    }
+
+    return res.status(201).json(new apiResponse(201, {}, ' Avatar deleted Successfully ! '));
+});
+
+const getAdminProfile = asyncHandler(async (req, res) => {
+    const admin = await Admin.findById(req.admin._id).select('name email');
+    return res.status(200).json(new apiResponse(200, admin, ' admin profile has been fetched !'));
+});
+
+const editName = asyncHandler(async (req, res) => {
+    const { name, email } = req.body;
+
+    if (!name || !email) {
+        throw new apiError(400, '');
+    }
+
+    const admin = await Admin.findByIdAndUpdate(
+        req.admin._id,
+        { $set: { name, email } },
+        { new: true }
+    ).select('name email');
     return res
     .status(200)
-    ,json(
+    .json(
         new apiResponse(
-            201,
-            {avatar: admin.avatar},
-            'Avatar Fetched Successfully'
-        )
-    )
-})
+            200,
+             admin,
+              ' name updated successfully !'
+            ));
+});
 
-export { adminLogin, refreshtokenController, adminLogOut };
+export {
+    adminLogin,
+    refreshtokenController,
+    adminLogOut,
+    avatarUpload,
+    getAvatar,
+    editAvatar,
+    avatarDelete,
+};

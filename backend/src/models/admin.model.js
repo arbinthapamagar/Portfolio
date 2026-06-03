@@ -41,7 +41,6 @@ const adminSchema = new mongoose.Schema(
             required: true,
         },
         avatarId:{
-            required: true, 
             type: String, 
 
         }

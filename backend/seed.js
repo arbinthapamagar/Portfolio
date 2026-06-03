@@ -1,28 +1,37 @@
 import { Admin } from './src/models/admin.model.js';
 import dbConnect from './src/db/index.js';
-import { asyncHandler } from './src/utils/asyncHandler.js';
-import { apiError } from './src/utils/apiError.js';
 import dotenv from 'dotenv';
 
 dotenv.config();
 
-const seedAdmin = asyncHandler(async () => {
+const seedAdmin = async () => {
   await dbConnect();
 
-  const admin = await Admin.create({
-    name: 'Arbeen',
-    email: 'arbinbabuthapamagar2002@gmail.com',
-    password: 'Arbeen@1',
-    phoneNumber: '9818856764',
-    role: 'admin',
-  });
   const existingAdmin = await Admin.findOne({ email: 'arbinbabuthapamagar2002@gmail.com' });
   if (existingAdmin) {
-    throw new apiError(400, 'Admin already exits');
+    console.log('Admin already exists');
+    process.exit(0);
   }
-  console.log('admin EMAIL: ', admin.email);
-  process.exit();
-});
-seedAdmin();
 
-export {seedAdmin}
+  let admin;
+  try {
+    admin = await Admin.create({
+      name: 'Arbeen',
+      email: 'arbinbabuthapamagar2002@gmail.com',
+      password: 'Arbeen@1',
+      phoneNumber: '9818856764',
+      role: 'admin',
+    });
+  } catch (err) {
+    console.error('Failed to create admin, nothing was saved:', err.message);
+    process.exit(1);
+  }
+
+  console.log('Admin seeded — EMAIL: ', admin.email);
+  process.exit(0);
+};
+
+seedAdmin().catch((err) => {
+  console.error('Seed failed:', err.message);
+  process.exit(1);
+});

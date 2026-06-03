@@ -13,7 +13,7 @@ const generateAccessTokenAndRefreshToken = async (adminId) => {
         const refreshtoken = admin.generateRefreshToken();
         admin.refreshToken = refreshtoken;
         await admin.save({ validateBeforeSave: false });
-        return { accessToken, refreshtoken };
+        return { accessToken, refreshToken };
     } catch (error) {
         throw new apiError(
             500,

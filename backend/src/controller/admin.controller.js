@@ -5,6 +5,7 @@ import { apiError } from '../utils/apiError.js';
 import { apiResponse } from '../utils/apiResponse.js';
 import jwt from 'jsonwebtoken';
 import { uploadOnCloudinary, deleteFromCloudinary } from '../utils/cloudinary.js';
+import { verifyJwt } from '../middlewares/auth.middleware.js';
 
 const generateAccessTokenAndRefreshToken = async (adminId) => {
     try {
@@ -15,7 +16,7 @@ const generateAccessTokenAndRefreshToken = async (adminId) => {
         await admin.save({ validateBeforeSave: false });
         return { accessToken, refreshToken };
     } catch (error) {
-        console.log(" error" , error)
+        console.log(' error', error);
         throw new apiError(
             500,
             ' Something went wrong while creating accesstoken and refresh token'
@@ -77,47 +78,41 @@ const adminLogin = asyncHandler(async (req, res) => {
 
 //
 // refreshtoken rotation
-
 const refreshtokenController = asyncHandler(async (req, res) => {
-    const incomingRefreshToken = req.cookie?.refreshToken || req.body?.refreshToken;
+    const incomingRefreshToken = req.cookies?.refreshToken || req.body?.refreshToken;
 
     if (!incomingRefreshToken) {
-        throw new apiError(401, ' unauthorized request');
+        throw new apiError(401, 'unauthorized request');
     }
 
-    const decodedToken = jwt.verify(incomingRefreshToken, process.env.REFRESH_TOKEN_SECRET);
-    if (!decodedToken) {
-        throw new apiError(401, ' invalid refresh token !');
+    let decodedToken;
+    try {
+        decodedToken = jwt.verify(incomingRefreshToken, process.env.REFRESH_TOKEN_SECRET);
+    } catch (error) {
+        throw new apiError(401, 'invalid or expired refresh token');
     }
 
     const admin = await Admin.findById(decodedToken._id);
-
     if (!admin) {
-        throw new apiError(401, ' invalid refresh token ');
+        throw new apiError(401, 'admin not found');
     }
 
-    if (incomingRefreshToken !== admin?.refreshToken) {
-        throw new apiError(401, ' Refresh token expired or invalid ');
+    if (incomingRefreshToken !== admin.refreshToken) {
+        throw new apiError(401, 'refresh token is expired or already used');
     }
 
     const { accessToken, refreshToken } = await generateAccessTokenAndRefreshToken(admin._id);
 
-    const option = {
+    const options = {
         httpOnly: true,
         secure: true,
     };
 
     return res
         .status(200)
-        .cookie('accessToken', accessToken, option)
-        .cookie('refreshToken', refreshToken, option)
-        .json(
-            new apiResponse(
-                200,
-                { accessToken, refreshToken },
-                ' accesstoken refreshed successfully '
-            )
-        );
+        .cookie('accessToken', accessToken, options)
+        .cookie('refreshToken', refreshToken, options)
+        .json(new apiResponse(200, { accessToken, refreshToken }, 'access token refreshed successfully'));
 });
 
 // logout the admin
@@ -161,10 +156,9 @@ const avatarUpload = asyncHandler(async (req, res) => {
     try {
         avatarDetails = await Admin.findByIdAndUpdate(
             req.admin._id,
-          { $set : { avatar: avatar.secure_url, avatarId: avatar.public_id}},
-          {new: true}
-           
-        ).select("avatar avatarId");
+            { $set: { avatar: avatar.secure_url, avatarId: avatar.public_id } },
+            { new: true }
+        ).select('avatar avatarId');
     } catch (error) {
         if (avatar.public_id) {
             await deleteFromCloudinary(avatar.public_id);
@@ -173,15 +167,18 @@ const avatarUpload = asyncHandler(async (req, res) => {
     }
     return res
         .status(201)
-        .json(new apiResponse(201, avatarDetails, 'Avatar Created Successfullyin db '));
+        .json(new apiResponse(201, avatarDetails, 'Avatar Uploaded Successfully ! '));
 });
 
 // fetech the avatar
 
 const getAvatar = asyncHandler(async (req, res) => {
-    const admin = await Admin.findById(req.params.id);
+    const admin = await Admin.findById(req.admin._id);
     if (!admin) {
-        throw new apiError(404, ' avatar not found');
+        throw new apiError(404, ' admin not found');
+    }
+    if(!admin.avatar){
+        throw new apiError(400, " no avatar found  ")
     }
     console.log('admin is : ===> ', admin);
     return res
@@ -190,48 +187,66 @@ const getAvatar = asyncHandler(async (req, res) => {
 });
 
 //edit avatar
+
 const editAvatar = asyncHandler(async (req, res) => {
-    const avatar = await Admin.findById(req.params.id);
-    if (req.file) {
-        if (avatar.avatar) {
-            const public_id = avatar.public_id;
-            await deleteFromCloudinary(public_id);
-        }
-        //upload new
-
-        const cloudinaryResponse = await uploadOnCloudinary(req.file?.path);
-        console.log('cloudinaryResponse', cloudinaryResponse);
-        if (!cloudinaryResponse) {
-            throw new apiError(500, ' filed while uploading into cloudinary');
-        }
-
-        avatar.avatar = cloudinaryResponse.secure_url;
-        avatar.avatarId = cloudinaryResponse.public_id;
-
-        await avatar.save();
-        return res.status().json(new apiResponse(201, avatar, ' avatar updated successfully '));
+    if (!req.file) {
+        throw new apiError(400, 'Avatar file is required');
     }
-});
 
+    const admin = await Admin.findById(req.admin._id);
+    if (!admin) {
+        throw new apiError(404, 'admin not found');
+    }
+
+    // delete old image if one exists
+    if (admin.avatarId) {
+        await deleteFromCloudinary(admin.avatarId);
+    }
+
+    // upload new
+    const cloudinaryResponse = await uploadOnCloudinary(req.file.path);
+    if (!cloudinaryResponse) {
+        throw new apiError(500, 'failed while uploading to cloudinary');
+    }
+
+    admin.avatar = cloudinaryResponse.secure_url;
+    admin.avatarId = cloudinaryResponse.public_id;
+    await admin.save();
+
+    return res.status(200).json(new apiResponse(200, admin, 'avatar updated successfully'));
+});
 //delete avatar ?
 
 const avatarDelete = asyncHandler(async (req, res) => {
-    const avatar = await Admin.findByIdAndDelete(req.params.id);
-    if (!avatar) {
-        throw new apiError(404, ' avatar not found ');
+    const admin = await Admin.findById(req.admin._id);
+    if (!admin) {
+        throw new apiError(404, 'admin not found');
     }
 
-    if (avatar.avatar) {
-        await deleteFromCloudinary(avatar.avatarId);
+    if (!admin.avatar) {
+        throw new apiError(400, 'no avatar to delete');
     }
 
-    return res.status(201).json(new apiResponse(201, {}, ' Avatar deleted Successfully ! '));
+    await deleteFromCloudinary(admin.avatarId);
+
+    await Admin.findByIdAndUpdate(
+        req.admin._id,
+        { $unset: { avatar: '', avatarId: '' } }
+    );
+
+    return res.status(200).json(new apiResponse(200, {}, 'Avatar deleted successfully'));
 });
+
+
+
 
 const getAdminProfile = asyncHandler(async (req, res) => {
     const admin = await Admin.findById(req.admin._id).select('name email');
     return res.status(200).json(new apiResponse(200, admin, ' admin profile has been fetched !'));
 });
+
+
+
 
 const editName = asyncHandler(async (req, res) => {
     const { name, email } = req.body;
@@ -245,14 +260,7 @@ const editName = asyncHandler(async (req, res) => {
         { $set: { name, email } },
         { new: true }
     ).select('name email');
-    return res
-    .status(200)
-    .json(
-        new apiResponse(
-            200,
-             admin,
-              ' name updated successfully !'
-            ));
+    return res.status(200).json(new apiResponse(200, admin, ' name updated successfully !'));
 });
 
 export {

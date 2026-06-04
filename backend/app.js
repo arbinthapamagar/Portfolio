@@ -45,6 +45,6 @@ import {contactRouter} from './src/routes/contact.route.js'
 // route decleration
 
 app.use('/api/v1/admin', adminRouter);
-app.use('/apu/v1/contact-us',contactRouter);
+app.use('/api/v1/contact',contactRouter);
 
 export default app;

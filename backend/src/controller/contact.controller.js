@@ -10,8 +10,8 @@ import { uploadOnCloudinary, deleteFromCloudinary } from '../utils/cloudinary.js
 
 const contactController = asyncHandler(async (req, res) => {
     const { name, email, message, subject } = req.body;
-    if (!name?.trim() || !email?.trim() || subject?.trim() || !meessage?.trim()) {
-        throw new apiError(400, ' all foeld are required ! ');
+    if (!name?.trim() || !email?.trim() || ! subject?.trim() || !message?.trim()) {
+        throw new apiError(400, ' all field are required ! ');
     }
 
     //validation
@@ -33,32 +33,27 @@ const contactController = asyncHandler(async (req, res) => {
 });
 
 // fetch the contact into admin profile : with pagination of 50
-
 const getContactMessage = asyncHandler(async (req, res) => {
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 50;
-    const hasLimit = limit > 0;
-    const skip = hasLimit ? (page - 1) * limit : 0;
+    const skip = (page - 1) * limit;
 
-    let query = await Contact.find().sort({ createdAt: -1 });
-    if (hasLimit) {
-        query = query.skip(skip).limit(limit);
-    }
-    const contact = query;
+    const contacts = await Contact.find().sort({ createdAt: -1 }).skip(skip).limit(limit);
     const total = await Contact.countDocuments();
+
     return res.status(200).json(
         new apiResponse(
             200,
             {
-                message,
+                contacts,
                 pagination: {
-                    currentPage: hasLimit ? page : 1,
-                    totalPages: hasLimit ? Math.ceil(total / limit) : 1,
+                    currentPage: page,
+                    totalPages: Math.ceil(total / limit),
                     totalItems: total,
-                    limit: hasLimit ? limit : total,
+                    itemsPerPage: limit,
                 },
             },
-            'ContactMessageDetails fetched successfully'
+            'contact messages fetched successfully'
         )
     );
 });

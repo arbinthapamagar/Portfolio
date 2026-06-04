@@ -18,9 +18,9 @@ const avatar = upload.fields({ name: 'avatar', maxCount: 1 });
 adminRouter.route('/login').post(adminLogin);
 adminRouter.route('/refresh-token').post(refreshtokenController);
 adminRouter.route('/logout').post(verifyJwt, adminLogOut);
-adminRouter.route('/avatarUpload').post(verifyJwt, avatarUpload);
+adminRouter.route('/avatarUpload').post(verifyJwt,upload.single('avatar'), avatarUpload);
 adminRouter.route('/getAvatar').get(verifyJwt, getAvatar);
-adminRouter.route('/editAvatar').patch(avatar,verifyJwt,editAvatar);
-adminRouter.route('/deleteAvatar').delete(verifyJwt,avatarDelete)
+adminRouter.route('/editAvatar').patch(verifyJwt,upload.single('avatar'),editAvatar);
+adminRouter.route('/deleteAvatar').delete(verifyJwt, avatarDelete)
 
 export { adminRouter };

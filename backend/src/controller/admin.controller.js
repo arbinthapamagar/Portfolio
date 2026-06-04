@@ -10,11 +10,12 @@ const generateAccessTokenAndRefreshToken = async (adminId) => {
     try {
         const admin = await Admin.findById(adminId);
         const accessToken = admin.generateAccessToken();
-        const refreshtoken = admin.generateRefreshToken();
-        admin.refreshToken = refreshtoken;
+        const refreshToken = admin.generateRefreshToken();
+        admin.refreshToken = refreshToken;
         await admin.save({ validateBeforeSave: false });
         return { accessToken, refreshToken };
     } catch (error) {
+        console.log(" error" , error)
         throw new apiError(
             500,
             ' Something went wrong while creating accesstoken and refresh token'

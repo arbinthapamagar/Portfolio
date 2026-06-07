@@ -112,7 +112,13 @@ const refreshtokenController = asyncHandler(async (req, res) => {
         .status(200)
         .cookie('accessToken', accessToken, options)
         .cookie('refreshToken', refreshToken, options)
-        .json(new apiResponse(200, { accessToken, refreshToken }, 'access token refreshed successfully'));
+        .json(
+            new apiResponse(
+                200,
+                { accessToken, refreshToken },
+                'access token refreshed successfully'
+            )
+        );
 });
 
 // logout the admin
@@ -156,7 +162,12 @@ const avatarUpload = asyncHandler(async (req, res) => {
     try {
         avatarDetails = await Admin.findByIdAndUpdate(
             req.admin._id,
-            { $set: { avatar: avatar.secure_url, avatarId: avatar.public_id } },
+            {
+                $set: {
+                    avatar: avatar.secure_url,
+                    avatarId: avatar.public_id,
+                },
+            },
             { new: true }
         ).select('avatar avatarId');
     } catch (error) {
@@ -177,8 +188,8 @@ const getAvatar = asyncHandler(async (req, res) => {
     if (!admin) {
         throw new apiError(404, ' admin not found');
     }
-    if(!admin.avatar){
-        throw new apiError(400, " no avatar found  ")
+    if (!admin.avatar) {
+        throw new apiError(400, ' no avatar found  ');
     }
     console.log('admin is : ===> ', admin);
     return res
@@ -229,13 +240,14 @@ const avatarDelete = asyncHandler(async (req, res) => {
 
     await deleteFromCloudinary(admin.avatarId);
 
-    await Admin.findByIdAndUpdate(
-        req.admin._id,
-        { $unset: { avatar: '', avatarId: '' } }
-    );
+    await Admin.findByIdAndUpdate(req.admin._id, { $unset: { avatar: '', avatarId: '' } });
 
     return res.status(200).json(new apiResponse(200, {}, 'Avatar deleted successfully'));
 });
+
+
+
+
 
 
 
@@ -244,9 +256,6 @@ const getAdminProfile = asyncHandler(async (req, res) => {
     const admin = await Admin.findById(req.admin._id).select('name email');
     return res.status(200).json(new apiResponse(200, admin, ' admin profile has been fetched !'));
 });
-
-
-
 
 const editName = asyncHandler(async (req, res) => {
     const { name, email } = req.body;

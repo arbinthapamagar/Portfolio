@@ -2,9 +2,6 @@ import { Contact } from '../models/contact.model.js';
 import { asyncHandler } from '../utils/asyncHandler.js';
 import { apiError } from '../utils/apiError.js';
 import { apiResponse } from '../utils/apiResponse.js';
-import jwt from 'jsonwebtoken';
-import dotenv, { parse } from 'dotenv';
-dotenv.config();
 
 import { uploadOnCloudinary, deleteFromCloudinary } from '../utils/cloudinary.js';
 
@@ -70,5 +67,6 @@ const deleteContact = asyncHandler(async (req, res) => {
 });
 
 // note for admin
+
 
 export { contactController, getContactMessage, deleteContact };

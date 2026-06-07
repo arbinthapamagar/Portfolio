@@ -7,10 +7,7 @@ const footerSchema = new mongoose.Schema(
             type: String,
             default: 'Developed by Matat Technologies LTD',
         },
-        taglineHe: {
-            type: String,
-            default: '',
-        },
+       
         email: {
             type: String,
             default: 'hello@portfolio.com',

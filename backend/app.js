@@ -41,10 +41,12 @@ app.use(cookieParser());
 //routes import here **************************
 import { adminRouter } from './src/routes/admin.route.js';
 import {contactRouter} from './src/routes/contact.route.js'
+import {experienceRouter} from "./src/routes/experience.route.js"
 
 // route decleration
 
 app.use('/api/v1/admin', adminRouter);
 app.use('/api/v1/contact',contactRouter);
+app.use('/api/v1/experience',experienceRouter)
 
 export default app;

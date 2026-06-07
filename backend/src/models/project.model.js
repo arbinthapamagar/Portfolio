@@ -5,44 +5,47 @@ const project = new mongoose.Schema(
         title: {
             type: String,
             required: true,
+            trim: true,
         },
         description: {
             type: String,
             required: true,
+            trim: true,
         },
-        tags: {
+        problemSolved: {
             type: String,
             required: true,
+            trim: true,
         },
-        projectLink: {
-            type: String,
+        stack: {
+            type: [String],
             required: true,
+            default: [],
         },
-        projectImage: {
-            type: String,
-            required: true,
-        },
-        // Hebrew translations
-        titleHe: {
-            type: String,
-            default: '',
-        },
-        descriptionHe: {
-            type: String,
-            default: '',
-        },
-        tagsHe: {
-            type: String,
-            default: '',
-        },
-        // extra screenshots — managed by the screenshot helpers in project.controller.js
-        // each entry stores the cloudinary url + publicId so we can delete from cloud later
         screenshots: [
             {
-                url: { type: String },
-                publicId: { type: String },
+                url: {
+                    type: String,
+                },
+                publicId: {
+                    type: String,
+                },
             },
         ],
+        demoVideo: {
+            type: String,
+            default: '',
+        },
+        links: {
+            liveDemo: {
+                type: String,
+                default: '',
+            },
+            github: {
+                type: String,
+                default: '',
+            },
+        },
     },
     { timestamps: true }
 );

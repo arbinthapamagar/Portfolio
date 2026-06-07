@@ -27,10 +27,7 @@ const sectionHeadingSchema = new mongoose.Schema(
             type: String,
             default: '',
         },
-        labelHe: {
-            type: String,
-            default: '',
-        },
+     
         titlePlainHe: {
             type: String,
             default: '',

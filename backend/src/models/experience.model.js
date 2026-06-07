@@ -1,8 +1,8 @@
 import mongoose from 'mongoose';
 
-const app = new mongoose.Schema(
+const experienceSchema = new mongoose.Schema(
     {
-        appName: {
+        title: {
             type: String,
             required: true,
         },
@@ -10,51 +10,31 @@ const app = new mongoose.Schema(
             type: String,
             required: true,
         },
-        platform: {
+        techStack:{
             type: String,
+            required:true, 
+        }, 
+        imageUrl:{
+            type: String, 
+            required: true
+        },
+        imageId:{
+            type: String, 
             required: true,
         },
-        link: {
-            type: String,
+        liveUrl:{
+            type:String, 
             required: true,
-        },
-        appIcon: {
-            type: String,
-            required: true,
-        },
-        appIconId: {
-            type: String,
-            default: '',
-        },
-        // Hebrew translations
-        appNameHe: {
-            type: String,
-            default: '',
-        },
-        descriptionHe: {
-            type: String,
-            default: '',
-        },
-        platformHe: {
-            type: String,
-            default: '',
-        },
-        rating: {
-            type: Number,
-            min: 0,
-            max: 5,
-            default: 0,
-        },
-        // extra screenshots — managed by the screenshot helpers in app.controller.js
-        screenshots: [
-            {
-                url: { type: String },
-                publicId: { type: String },
-            },
-        ],
+        }, 
+        featured: {
+            type: Boolean, 
+            required: true, 
+            default: true, 
+
+        }
     },
     { timestamps: true }
 );
 
-const App = mongoose.model('App', app);
-export { App };
+export const Experience = mongoose.model('Experience', experienceSchema);
+

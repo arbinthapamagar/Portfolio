@@ -13,7 +13,7 @@ import {
 
 const adminRouter = Router();
 
-const avatar = upload.fields({ name: 'avatar', maxCount: 1 });
+const avatar = upload.single({ name: 'avatar', maxCount: 1 });
 
 adminRouter.route('/login').post(adminLogin);
 adminRouter.route('/refresh-token').post(refreshtokenController);

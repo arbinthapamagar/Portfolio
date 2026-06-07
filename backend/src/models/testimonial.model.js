@@ -14,19 +14,6 @@ const testimonial = new mongoose.Schema(
             type: String,
             required: true,
         },
-        // Hebrew translations
-        nameHe: {
-            type: String,
-            default: '',
-        },
-        companyHe: {
-            type: String,
-            default: '',
-        },
-        reviewTextHe: {
-            type: String,
-            default: '',
-        },
         rating: {
             type: Number,
             min: 0,

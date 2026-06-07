@@ -5,7 +5,7 @@ const footerSchema = new mongoose.Schema(
     {
         tagline: {
             type: String,
-            default: 'Developed by Matat Technologies LTD',
+            default: 'Developed by Arbin Thapa Magar',
         },
        
         email: {
@@ -14,7 +14,7 @@ const footerSchema = new mongoose.Schema(
         },
         phone: {
             type: String,
-            default: '+977 9800000000',
+            default: '+977 9818856764',
         },
         location: {
             type: String,
@@ -26,7 +26,7 @@ const footerSchema = new mongoose.Schema(
         },
         copyright: {
             type: String,
-            default: 'Matat. All rights reserved.',
+            default: 'Arbin. All rights reserved.',
         },
         copyrightHe: {
             type: String,

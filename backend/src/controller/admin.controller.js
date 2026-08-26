@@ -247,11 +247,6 @@ const avatarDelete = asyncHandler(async (req, res) => {
 
 
 
-
-
-
-
-
 const getAdminProfile = asyncHandler(async (req, res) => {
     const admin = await Admin.findById(req.admin._id).select('name email');
     return res.status(200).json(new apiResponse(200, admin, ' admin profile has been fetched !'));

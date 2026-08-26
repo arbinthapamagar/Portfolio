@@ -22,6 +22,12 @@ const project = new mongoose.Schema(
             required: true,
             default: [],
         },
+        // "your role" from description.md — e.g. 'Solo developer', 'Backend lead'
+        role: {
+            type: String,
+            default: '',
+            trim: true,
+        },
         screenshots: [
             {
                 url: {
@@ -35,6 +41,14 @@ const project = new mongoose.Schema(
         demoVideo: {
             type: String,
             default: '',
+        },
+        featured: {
+            type: Boolean,
+            default: false,
+        },
+        order: {
+            type: Number,
+            default: 0,
         },
         links: {
             liveDemo: {

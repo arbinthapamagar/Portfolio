@@ -80,6 +80,24 @@ const about = new mongoose.Schema(
                 order: Number,
             },
         ],
+        // downloadable resume (description.md) — cloudinary raw upload
+        resumeUrl: {
+            type: String,
+            default: '',
+        },
+        resumeId: {
+            type: String,
+            default: '',
+        },
+        // small portrait shown beside the about copy
+        photo: {
+            type: String,
+            default: '',
+        },
+        photoId: {
+            type: String,
+            default: '',
+        },
         isActive: {
             type: Boolean,
             required: true,

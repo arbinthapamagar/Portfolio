@@ -1,16 +1,50 @@
-# React + Vite
+# Portfolio — Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+React 19 + Vite + Tailwind 4, animated with [Motion](https://motion.dev).
 
-Currently, two official plugins are available:
+## Run
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+```bash
+npm install
+npm run dev     # http://localhost:5173
+```
 
-## React Compiler
+Vite proxies `/api` to `http://localhost:8000` (see `vite.config.js`), so start the
+backend first. To point at a deployed API instead, set `VITE_API_URL`:
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+```bash
+VITE_API_URL=https://api.example.com/api/v1 npm run build
+```
 
-## Expanding the ESLint configuration
+## Structure
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+```
+src/
+  lib/api.js            axios instance + publicApi / adminApi
+  context/AuthContext   admin session (token in localStorage)
+  components/
+    motion/             Reveal, TextReveal, Magnetic, Tilt, Marquee,
+                        Counter, Parallax, Aurora, Cursor, ScrollProgress
+    ui/                 SectionHeader, GlowButton, Loader, EmptyState, BrandIcons
+    layout/             Navbar, Footer
+    sections/           Hero, About, Skills, Projects, Experience,
+                        Clients, Testimonials, Contact
+    admin/              ResourceManager (generic CRUD), SingletonForm, Field, Toast
+  pages/                Home, ProjectDetail, NotFound
+  pages/admin/          Login, AdminLayout, Dashboard + one screen per resource
+```
+
+## Admin
+
+`/admin/login` — signs in with the seeded admin, then every section of the public
+site is editable at `/admin/*`. Content the admin has not filled in falls back to
+sensible defaults, so the site never renders empty.
+
+## Notes
+
+- The backend sets `secure: true` cookies, which browsers drop on `http://localhost`.
+  The frontend therefore stores the access token from the login response and sends it
+  as `Authorization: Bearer`, which `auth.middleware.js` already accepts.
+- All motion respects `prefers-reduced-motion`.
+- Brand icons (GitHub, LinkedIn, …) are local inline SVGs in `ui/BrandIcons.jsx` —
+  lucide-react v1 removed brand marks.

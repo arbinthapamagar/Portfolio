@@ -132,8 +132,20 @@ function ProjectCard({ project, index }) {
 export default function Projects({ projects = [], heading }) {
     const [filter, setFilter] = useState('All');
 
-    // build the filter row from whatever stacks actually exist
-    const tags = ['All', ...new Set(projects.flatMap((p) => p.stack || []))].slice(0, 8);
+    // build the filter row from whatever stacks actually exist, most-used first
+    // (first-seen order would bury common tags behind one project's long stack)
+    const counts = projects.reduce((acc, p) => {
+        (p.stack || []).forEach((tech) => {
+            acc[tech] = (acc[tech] || 0) + 1;
+        });
+        return acc;
+    }, {});
+    const tags = [
+        'All',
+        ...Object.keys(counts)
+            .sort((a, b) => counts[b] - counts[a] || a.localeCompare(b))
+            .slice(0, 9),
+    ];
     const visible =
         filter === 'All' ? projects : projects.filter((p) => (p.stack || []).includes(filter));
 

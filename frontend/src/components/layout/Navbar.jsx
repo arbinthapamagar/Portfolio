@@ -53,38 +53,38 @@ export default function Navbar({ resumeUrl }) {
                 initial={{ y: -80, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1], delay: 0.2 }}
-                className="fixed inset-x-0 top-0 z-50 px-4 pt-4"
+                className="fixed inset-x-0 top-0 z-50 px-4 pt-5 sm:pt-6"
             >
                 <motion.nav
                     animate={{
-                        maxWidth: condensed ? 880 : 1200,
+                        maxWidth: condensed ? 1060 : 1400,
                         backgroundColor: condensed ? 'rgba(14,14,21,0.72)' : 'rgba(14,14,21,0)',
                         borderColor: condensed ? 'rgba(255,255,255,0.08)' : 'rgba(255,255,255,0)',
-                        paddingTop: condensed ? 10 : 16,
-                        paddingBottom: condensed ? 10 : 16,
+                        paddingTop: condensed ? 16 : 24,
+                        paddingBottom: condensed ? 16 : 24,
                     }}
                     transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
-                    className="mx-auto flex items-center justify-between rounded-full border px-5 backdrop-blur-xl"
+                    className="mx-auto flex items-center justify-between rounded-full border px-6 backdrop-blur-xl sm:px-8"
                 >
-                    <Link to="/" className="group flex items-center gap-2.5">
+                    <Link to="/" className="group flex items-center gap-3">
                         <motion.span
-                            className="grid h-8 w-8 place-items-center rounded-lg bg-glow-500 font-display text-sm font-bold text-white"
+                            className="grid h-11 w-11 place-items-center rounded-xl bg-glow-500 font-display text-lg font-bold text-white"
                             whileHover={{ rotate: 90, borderRadius: '50%' }}
                             transition={{ type: 'spring', stiffness: 300, damping: 18 }}
                         >
                             A
                         </motion.span>
-                        <span className="font-display text-sm font-semibold tracking-tight">
+                        <span className="font-display text-lg font-semibold tracking-tight sm:text-xl">
                             Arbeen
                         </span>
                     </Link>
 
-                    <ul className="hidden items-center gap-1 md:flex">
+                    <ul className="hidden items-center gap-1.5 md:flex">
                         {LINKS.map((link) => (
                             <li key={link.href}>
                                 <a
                                     href={link.href}
-                                    className="relative block rounded-full px-4 py-2 text-sm text-mist-300 transition-colors hover:text-white"
+                                    className="relative block rounded-full px-5 py-2.5 text-base font-medium text-mist-300 transition-colors hover:text-white"
                                 >
                                     {active === link.href && (
                                         <motion.span
@@ -99,14 +99,14 @@ export default function Navbar({ resumeUrl }) {
                         ))}
                     </ul>
 
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-3">
                         {resumeUrl && (
                             <Magnetic className="hidden sm:inline-block">
                                 <a
                                     href={resumeUrl}
                                     target="_blank"
                                     rel="noreferrer"
-                                    className="rounded-full border border-glow-400/40 bg-glow-500/10 px-4 py-2 text-sm font-medium text-glow-300 transition-colors hover:bg-glow-500/20"
+                                    className="rounded-full border border-glow-400/40 bg-glow-500/10 px-5 py-2.5 text-base font-medium text-glow-300 transition-colors hover:bg-glow-500/20"
                                 >
                                     Résumé
                                 </a>
@@ -117,9 +117,9 @@ export default function Navbar({ resumeUrl }) {
                             aria-label="Toggle menu"
                             aria-expanded={open}
                             onClick={() => setOpen((v) => !v)}
-                            className="grid h-9 w-9 place-items-center rounded-full border border-white/10 text-mist-300 md:hidden"
+                            className="grid h-11 w-11 place-items-center rounded-full border border-white/10 text-mist-300 md:hidden"
                         >
-                            {open ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
+                            {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
                         </button>
                     </div>
                 </motion.nav>
@@ -133,7 +133,7 @@ export default function Navbar({ resumeUrl }) {
                         exit={{ opacity: 0 }}
                         className="fixed inset-0 z-40 bg-ink-950/95 backdrop-blur-xl md:hidden"
                     >
-                        <ul className="flex h-full flex-col items-center justify-center gap-2">
+                        <ul className="flex h-full flex-col items-center justify-center gap-4">
                             {LINKS.map((link, i) => (
                                 <motion.li
                                     key={link.href}
@@ -144,7 +144,7 @@ export default function Navbar({ resumeUrl }) {
                                     <a
                                         href={link.href}
                                         onClick={() => setOpen(false)}
-                                        className="font-display text-3xl font-semibold text-mist-300 transition-colors hover:text-glow-300"
+                                        className="font-display text-4xl font-semibold text-mist-300 transition-colors hover:text-glow-300 sm:text-5xl"
                                     >
                                         {link.label}
                                     </a>

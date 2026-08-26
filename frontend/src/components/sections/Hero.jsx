@@ -8,7 +8,7 @@ import { EASE } from '../motion/variants';
 
 const FALLBACK = {
     title: 'Arbeen Thapa Magar',
-    subtitle: 'Full-stack developer building Shopify apps and web platforms.',
+    subtitle: 'Full-stack developer building agentic AI, RAG systems and web platforms.',
     buttonText: 'View my work',
     buttonLink: '#projects',
 };
@@ -34,7 +34,7 @@ export default function Hero({ hero, tickerItems = [] }) {
         <section
             ref={ref}
             id="hero"
-            className="relative flex min-h-[100svh] flex-col items-center justify-center overflow-hidden px-6 pt-28 pb-16"
+            className="relative flex min-h-[100svh] flex-col items-center justify-center overflow-hidden px-6 pt-36 pb-16"
         >
             <Aurora />
 

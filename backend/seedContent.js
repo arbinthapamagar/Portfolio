@@ -484,7 +484,7 @@ const seed = async () => {
     const about = await About.findOneAndUpdate(
         {},
         {
-            $set: { title: 'Software developer, backend-leaning' },
+            $set: { title: 'Software developer — backend-leaning, agentic AI and RAG' },
             // clear the invented counters ("10+ happy clients") so About falls back
             // to figures derived from the real content; admin stats still override
             $pull: { stats: { label: /happy clients|projects shipped|years building/i } },

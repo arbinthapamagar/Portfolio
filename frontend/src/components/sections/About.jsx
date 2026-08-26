@@ -9,6 +9,8 @@ import GlowButton from '../ui/GlowButton';
 import TechIcon from '../ui/TechIcon';
 import { stagger, fadeUp, EASE } from '../motion/variants';
 
+const FALLBACK_TITLE = 'Software developer — backend-leaning, agentic AI and RAG';
+
 /* A row of counters nobody can check is worse than no counters, so these are
    derived from what the site actually contains. Admin-entered stats still win. */
 function derivedStats({ projects, experience, services }) {
@@ -36,6 +38,12 @@ export default function About({
     const degree = education.find((e) => e.kind === 'degree') || education[0] || null;
     const topStack = [...new Set(services.flatMap((s) => s.items || []))].slice(0, 10);
 
+    // 'Software developer — backend-leaning, agentic AI and RAG' renders as two
+    // lines, the specialism in the accent gradient
+    const [titleHead, titleTail] = (about?.title || FALLBACK_TITLE)
+        .split(/\s+[—–-]{1,2}\s+/)
+        .slice(0, 2);
+
     return (
         <section id="about" className="relative overflow-hidden px-6 py-28 lg:py-36">
             <div className="mx-auto max-w-6xl">
@@ -51,8 +59,15 @@ export default function About({
                 <div className="mt-14 grid gap-12 lg:grid-cols-[1.15fr_0.85fr] lg:gap-16">
                     <div>
                         <Reveal>
-                            <h3 className="font-display text-2xl font-semibold text-mist-100">
-                                {about?.title || 'Software developer, backend-leaning'}
+                            {/* the headline statement — split on the em dash so the
+                                specialism reads in the accent gradient */}
+                            <h3 className="font-display text-3xl leading-[1.08] font-bold tracking-tight text-mist-100 sm:text-4xl lg:text-5xl">
+                                {titleHead}
+                                {titleTail && (
+                                    <span className="block bg-gradient-to-r from-glow-300 via-glow-400 to-berry-300 bg-clip-text text-transparent">
+                                        {titleTail}
+                                    </span>
+                                )}
                             </h3>
                         </Reveal>
 

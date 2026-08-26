@@ -1,8 +1,7 @@
-import { useEffect, useState } from 'react';
 import { motion } from 'motion/react';
-import { publicApi } from '../lib/api';
-import Navbar from '../components/layout/Navbar';
-import Footer from '../components/layout/Footer';
+import { Link } from 'react-router-dom';
+import { ArrowUpRight } from 'lucide-react';
+import { useSiteData } from '../context/SiteDataContext';
 import Hero from '../components/sections/Hero';
 import About from '../components/sections/About';
 import Skills from '../components/sections/Skills';
@@ -11,77 +10,60 @@ import Experience from '../components/sections/Experience';
 import Testimonials from '../components/sections/Testimonials';
 import Clients from '../components/sections/Clients';
 import Contact from '../components/sections/Contact';
-import ScrollProgress from '../components/motion/ScrollProgress';
-import Cursor from '../components/motion/Cursor';
+import Magnetic from '../components/motion/Magnetic';
+import { EASE } from '../components/motion/variants';
 
-const EMPTY = {
-    hero: null,
-    about: null,
-    footer: null,
-    services: [],
-    clients: [],
-    projects: [],
-    experience: [],
-    testimonials: [],
-    headings: {},
-};
+// each home section doubles as a teaser for its own page
+function SeeAll({ to, label }) {
+    return (
+        <div className="mx-auto -mt-16 max-w-6xl px-6 pb-16">
+            <Magnetic strength={0.2} className="inline-block">
+                <Link
+                    to={to}
+                    className="group inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-6 py-3 text-base font-medium text-mist-200 transition-colors hover:border-glow-400/50 hover:text-white"
+                >
+                    {label}
+                    <motion.span
+                        aria-hidden="true"
+                        className="inline-block"
+                        initial={false}
+                        whileHover={{ x: 3, y: -3 }}
+                        transition={{ type: 'spring', stiffness: 400, damping: 20 }}
+                    >
+                        <ArrowUpRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                    </motion.span>
+                </Link>
+            </Magnetic>
+        </div>
+    );
+}
 
 export default function Home() {
-    const [data, setData] = useState(EMPTY);
-    const [booted, setBooted] = useState(false);
-
-    // one parallel fetch for the whole page; a failing section just stays empty
-    useEffect(() => {
-        let alive = true;
-
-        const keys = Object.keys(EMPTY);
-        Promise.allSettled([
-            publicApi.hero(),
-            publicApi.about(),
-            publicApi.footer(),
-            publicApi.services(),
-            publicApi.clients(),
-            publicApi.projects(),
-            publicApi.experience(),
-            publicApi.testimonials(),
-            publicApi.headings(),
-        ]).then((results) => {
-            if (!alive) return;
-            const next = { ...EMPTY };
-            results.forEach((result, i) => {
-                if (result.status === 'fulfilled' && result.value != null) {
-                    next[keys[i]] = result.value;
-                } else if (result.status === 'rejected') {
-                    console.warn(`failed to load ${keys[i]}:`, result.reason?.message);
-                }
-            });
-            setData(next);
-            setBooted(true);
-        });
-
-        return () => {
-            alive = false;
-        };
-    }, []);
+    const { data, booted } = useSiteData();
 
     return (
-        <div className="grain relative min-h-screen">
-            <Cursor />
-            <ScrollProgress />
-            <Navbar resumeUrl={data.about?.resumeUrl} />
+        <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: booted ? 1 : 0 }}
+            transition={{ duration: 0.5, ease: EASE }}
+        >
+            <Hero hero={data.hero} tickerItems={data.about?.tickerItems} />
 
-            <motion.main initial={{ opacity: 0 }} animate={{ opacity: booted ? 1 : 0 }} transition={{ duration: 0.5 }}>
-                <Hero hero={data.hero} tickerItems={data.about?.tickerItems} />
-                <About about={data.about} heading={data.headings.about} />
-                <Skills services={data.services} heading={data.headings.skills} />
-                <Projects projects={data.projects} heading={data.headings.projects} />
-                <Experience experience={data.experience} heading={data.headings.experience} />
-                <Clients clients={data.clients} />
-                <Testimonials testimonials={data.testimonials} heading={data.headings.testimonials} />
-                <Contact heading={data.headings.contact} footer={data.footer} />
-            </motion.main>
+            <About about={data.about} heading={data.headings.about} />
+            <SeeAll to="/about" label="More about me" />
 
-            <Footer footer={data.footer} />
-        </div>
+            <Skills services={data.services} heading={data.headings.skills} />
+            <SeeAll to="/skills" label="See the full stack" />
+
+            <Projects projects={data.projects} heading={data.headings.projects} limit={6} />
+            <SeeAll to="/projects" label="Browse all projects" />
+
+            <Experience experience={data.experience} heading={data.headings.experience} />
+            <SeeAll to="/experience" label="Full experience & testimonials" />
+
+            <Clients clients={data.clients} />
+            <Testimonials testimonials={data.testimonials} heading={data.headings.testimonials} />
+            <Contact heading={data.headings.contact} footer={data.footer} />
+        </motion.div>
     );
 }

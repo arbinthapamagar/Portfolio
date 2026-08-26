@@ -24,7 +24,11 @@ const GH = 'https://github.com/arbinthapamagar';
 const LINKEDIN_URL = 'https://www.linkedin.com/feed/';
 
 // placeholder seed entries that are not real work
-const REMOVE_TITLES = [/shopify\s*discount\s*app/i, /^portfolio backend$/i];
+const REMOVE_TITLES = [
+    /shopify\s*discount\s*app/i,
+    /^portfolio backend$/i,
+    /^shipos\s*—\s*shipping/i,
+];
 
 const PROJECTS = [
     {
@@ -88,18 +92,6 @@ const PROJECTS = [
         links: { github: `${GH}/Matat-portfolio`, liveDemo: '' },
     },
     {
-        title: 'ShipOS — Shipping & Logistics Platform',
-        description:
-            'The data layer and admin console for a multi-carrier shipping platform: 45+ Mongoose models covering orders and order items, shipments and shipping status history, delivery providers and provider settings, pickup locations and pickup-point status, licences and licence types, companies, customers and customer notes, recipients, packages, payment details, SMS templates and settings, webhook logs, API request logs, and bilingual English/Hebrew city and street registries. A React admin front end sits on top with dashboard, orders, shipments, companies, customers, licences, reports and settings views.',
-        problemSolved:
-            'Shipping is where a schema either holds up or collapses — every carrier has its own statuses, every order can split across packages, and audit trails are non-negotiable when a parcel goes missing. The work here was modelling that domain properly: status transitions kept as their own logged collections rather than a mutable field, webhook and API-request logs stored so a carrier integration can be replayed and debugged after the fact, provider settings separated from providers so credentials rotate independently, and city/street data held bilingually because addresses are entered in Hebrew but queried in English. It also integrates storefront sources — Shopify and Wix website models feed orders in.',
-        stack: ['Node.js', 'Express', 'MongoDB', 'Mongoose', 'React', 'Vite', 'Cloudinary'],
-        role: 'Backend & data modelling',
-        featured: false,
-        order: 6,
-        links: { github: `${GH}/Ship`, liveDemo: '' },
-    },
-    {
         title: 'Bilingual Documentation Chatbot',
         description:
             'A Node/Express chatbot that answers questions about a product\'s documentation in whichever language you ask — Hebrew or English — with Claude-style threaded conversation history, live web search when the docs come up short, and a zero-dependency engine switch between the Anthropic API and a local Ollama model.',
@@ -108,7 +100,7 @@ const PROJECTS = [
         stack: ['Node.js', 'Express', 'Anthropic API', 'LangChain', 'Ollama', 'JavaScript'],
         role: 'Solo developer',
         featured: false,
-        order: 7,
+        order: 6,
         links: { github: `${GH}/ChatBot`, liveDemo: '' },
     },
     {
@@ -120,7 +112,7 @@ const PROJECTS = [
         stack: ['React', 'Node.js', 'Express', 'MongoDB', 'Docker', 'nginx', 'Vite'],
         role: 'Solo developer',
         featured: false,
-        order: 8,
+        order: 7,
         links: { github: `${GH}/Assessment`, liveDemo: '' },
     },
     {
@@ -132,7 +124,7 @@ const PROJECTS = [
         stack: ['Laravel', 'PHP', 'Blade', 'Livewire', 'MySQL'],
         role: 'Solo developer',
         featured: false,
-        order: 9,
+        order: 8,
         links: { github: `${GH}/e-commerce`, liveDemo: '' },
     },
     {
@@ -144,7 +136,7 @@ const PROJECTS = [
         stack: ['React', 'React Router', 'Shopify Polaris', 'App Bridge', 'GraphQL', 'Prisma', 'Docker'],
         role: 'Solo developer',
         featured: false,
-        order: 10,
+        order: 9,
         links: { github: `${GH}/shopify-learning-`, liveDemo: '' },
     },
     {
@@ -156,7 +148,7 @@ const PROJECTS = [
         stack: ['Node.js', 'Express', 'MongoDB', 'Mongoose', 'JWT', 'Cloudinary', 'Multer'],
         role: 'Solo developer',
         featured: false,
-        order: 11,
+        order: 10,
         links: { github: `${GH}/Arbeen_Backend`, liveDemo: '' },
     },
     {
@@ -168,7 +160,7 @@ const PROJECTS = [
         stack: ['React', 'Node.js', 'Express', 'MongoDB', 'Tailwind', 'Motion', 'JWT', 'Cloudinary'],
         role: 'Solo developer',
         featured: false,
-        order: 12,
+        order: 11,
         links: { github: `${GH}/Portfolio`, liveDemo: '' },
     },
     {
@@ -176,11 +168,11 @@ const PROJECTS = [
         description:
             'The deliberate-practice layer underneath everything above: a React fundamentals workbook (props, conditional and list rendering, controlled forms, hooks, lifting state) built as ~20 isolated components; a Laravel learning app covering sessions, gates and policies, mail, and file uploads; Mongoose data-modelling exercises schema-ing e-commerce, hospital and todo domains from scratch; and vanilla-JS DOM games — Rock Paper Scissors and Tic Tac Toe — written with no framework at all.',
         problemSolved:
-            'Each of these exists to isolate one thing and get it wrong cheaply, before it matters in a real project. The data-modelling repos in particular were the turning point: modelling the same three domains by hand is what made relationships, references versus embedding, and index choices feel obvious rather than memorised — which is why the schemas in ShipOS and VIntuna came together quickly. The vanilla-JS games are there for the opposite reason: knowing what React is actually doing for you is worth having built a UI without it.',
+            'Each of these exists to isolate one thing and get it wrong cheaply, before it matters in a real project. The data-modelling repos in particular were the turning point: modelling the same three domains by hand is what made relationships, references versus embedding, and index choices feel obvious rather than memorised — which is why the schemas in Tempu and VIntuna came together quickly. The vanilla-JS games are there for the opposite reason: knowing what React is actually doing for you is worth having built a UI without it.',
         stack: ['JavaScript', 'React', 'Node.js', 'Mongoose', 'Laravel', 'PHP', 'HTML', 'CSS'],
         role: 'Self-directed learning',
         featured: false,
-        order: 13,
+        order: 12,
         links: { github: GH, liveDemo: '' },
     },
 ];
@@ -237,9 +229,9 @@ const SERVICES = [
         title: 'Databases',
         description: 'Modelling, queries and migrations.',
         details:
-            'Mostly MongoDB via Mongoose, where the interesting work is schema design: references versus embedding, what deserves its own collection, and which indexes the real query patterns need. ShipOS was the test of that — 45+ models where status history lives in its own logged collections rather than a mutable field, so a lost parcel can actually be traced. Relational work in PostgreSQL and MySQL, Prisma where the schema should be the source of truth, and SQLite for local single-file stores.',
+            'Mostly MongoDB via Mongoose, where the interesting work is schema design: references versus embedding, what deserves its own collection, and which indexes the real query patterns need. Tempu was the test of that — trips, bidding, drivers, suppliers, wallets, withdrawals and support tickets across 25+ collections, with status history kept as its own records rather than a mutable field so a trip can actually be traced. Relational work in PostgreSQL and MySQL, Prisma where the schema should be the source of truth, and SQLite for local single-file stores.',
         highlights: [
-            'ShipOS: 45+ Mongoose models where shipment status history lives in its own logged collections, so a lost parcel can be traced.',
+            'Tempu: 25+ Mongoose collections covering trips, bidding, drivers, wallets and support, with status history kept as records rather than a mutable field.',
             'Schema design as the first step — references versus embedding, and indexes chosen from the real query patterns.',
             'Relational work in PostgreSQL and MySQL, including Prisma-backed Shopify session storage.',
             'SQLite for local single-file stores — the episodic memory layer in Ultron and the accessibility engine\'s scan ledger.',

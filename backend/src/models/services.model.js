@@ -18,6 +18,17 @@ const service = new mongoose.Schema(
             type: String,
             default: 'sparkles',
         },
+        // long-form copy shown when a group is expanded on the public site
+        details: {
+            type: String,
+            default: '',
+            trim: true,
+        },
+        // concrete things built with this stack, listed under the detail copy
+        highlights: {
+            type: [String],
+            default: [],
+        },
         // the actual tech list shown as chips inside the card
         items: {
             type: [String],

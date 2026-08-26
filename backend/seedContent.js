@@ -12,7 +12,11 @@ import mongoose from 'mongoose';
 import dbConnect from './src/db/index.js';
 import { Project } from './src/models/project.model.js';
 import { Hero } from './src/models/hero.model.js';
+import { About } from './src/models/about.model.js';
 import { Footer } from './src/models/footer.model.js';
+import { Service } from './src/models/services.model.js';
+import { Experience } from './src/models/experience.model.js';
+import { Education } from './src/models/education.model.js';
 
 dotenv.config();
 
@@ -42,7 +46,7 @@ const PROJECTS = [
         problemSolved:
             'Support agents were answering the same fare, policy and help-article questions by hand, and a generic chatbot would have invented answers. I built the AI as an isolated FastAPI microservice the Node backend proxies to, so it can crash, restart or be swapped without touching the app. Embeddings are pinned to local Ollama bge-m3 while chat is provider-switchable between Gemini and local Ollama via one env var — meaning the "brain" can change without ever re-embedding the store. Getting there meant discovering the hard way that a healthy-looking average similarity score can hide total retrieval failure in a second language: nomic-embed-text scored *higher* on Hebrew than English yet returned recall@1 of 0/8, which no relevance threshold can rescue. bge-m3 fixed it. Every retrieved chunk is gated by a tuned relevance floor before it reaches the model, and the provider layer rotates across multiple API keys and fallback models on quota errors, remembering the last working combination.',
         stack: ['Node.js', 'Express', 'MongoDB', 'React', 'React Native', 'Python', 'FastAPI', 'LangChain', 'ChromaDB', 'Gemini', 'Docker'],
-        role: 'Full-stack & AI engineer',
+        role: 'Software developer & AI',
         featured: true,
         order: 2,
         links: { github: `${GH}/Tempu`, liveDemo: '' },
@@ -78,7 +82,7 @@ const PROJECTS = [
         problemSolved:
             'The client needed to change copy, swap images and publish new case studies without a developer and without a redeploy, in two languages with opposite reading directions. So nothing is hard-coded: eleven Mongoose models each get a controller, and singleton sections (hero, about, footer) upsert one document while collections paginate. Images go through Multer to Cloudinary with the publicId stored alongside the URL, so replacing or deleting a record also cleans up the remote asset instead of leaking orphans. The same architecture is what this portfolio is built on.',
         stack: ['React', 'Node.js', 'Express', 'MongoDB', 'JWT', 'Cloudinary', 'Vite'],
-        role: 'Full-stack developer',
+        role: 'Software developer',
         featured: false,
         order: 5,
         links: { github: `${GH}/Matat-portfolio`, liveDemo: '' },
@@ -181,6 +185,241 @@ const PROJECTS = [
     },
 ];
 
+// skill groups, in display order — JavaScript / Node first, since that is the core
+const SERVICES = [
+    {
+        title: 'Core — JavaScript & Node',
+        description: 'Where most of my work lives.',
+        details:
+            'Every production system on this site is a Node service: Express on top of Mongoose, JWT access/refresh rotation with httpOnly cookies, Multer-to-Cloudinary uploads, and a layered apiError / apiResponse / asyncHandler convention so every route succeeds and fails in one predictable shape. On the query side I lean on aggregation pipelines rather than over-fetching and slicing in Node. TypeScript where the surface is worth typing — the accessibility engine is entirely TS.',
+        highlights: [
+            'Express + Mongoose APIs with JWT access/refresh rotation — the pattern behind this portfolio, VIntuna and the Matat CMS.',
+            'Aggregation-pipeline pagination via mongoose-aggregate-paginate-v2, so joins and filtering happen in the database rather than in Node.',
+            'A layered apiError / apiResponse / asyncHandler convention so every route has one success shape and one failure shape.',
+            'TypeScript end to end on the accessibility engine: a Playwright + axe-core CLI with typed rule, standard and report modules.',
+        ],
+        icon: 'zap',
+        items: ['JavaScript', 'Node.js', 'Express', 'REST APIs', 'JWT Auth', 'TypeScript'],
+        order: 1,
+    },
+    {
+        title: 'AI, Agents & RAG',
+        description: 'Agentic systems and retrieval, built end to end.',
+        details:
+            'I build agentic and retrieval systems from the pipeline up rather than calling one endpoint. On the agent side: LangGraph ReAct loops with tool routing, confirmation gating on destructive tools, and layered memory (episodic in SQLite, a knowledge graph, and durable facts extracted off the hot path). On the retrieval side: a staged pipeline — contextualize, classify intent, expand into query variants, MMR retrieve, rerank, assemble, then answer — with per-intent k and character budgets, and a relevance floor so an off-topic question cites nothing instead of guessing. Embeddings stay local on Ollama so switching the chat provider never means re-embedding the store; chat itself is provider-switchable between Anthropic, Gemini and local models, with key and model rotation on quota errors.',
+        highlights: [
+            'Ultron: a LangGraph ReAct agent wired to ~60 tool modules, with confirmation gating on the destructive ones.',
+            'A seven-stage RAG pipeline — contextualize, classify intent, expand, MMR retrieve, rerank, assemble, answer — with per-intent k and character budgets.',
+            'A relevance floor tuned to the embedder\'s own score distribution, so an off-topic question cites nothing instead of inventing an answer.',
+            'Measured retrieval per language and found nomic-embed-text scoring higher on Hebrew while returning recall@1 of 0/8; moved to bge-m3.',
+            'Provider-switchable chat (Anthropic, Gemini, local Ollama) with key and model rotation on quota errors, while embeddings stay local so the store never needs re-embedding.',
+        ],
+        icon: 'sparkles',
+        items: ['LangChain', 'LangGraph', 'ChromaDB', 'Ollama', 'FastAPI', 'Anthropic API', 'Gemini'],
+        order: 2,
+    },
+    {
+        title: 'Frontend',
+        description: 'Interfaces that feel fast.',
+        details:
+            'React with Vite, Tailwind for the system, and Motion for anything that moves — scroll-linked parallax, shared-layout transitions, staggered reveals, pointer-tracked tilt. I care about the boring parts too: route-level code splitting, one data fetch shared across pages instead of per-route refetching, and respecting prefers-reduced-motion on a site this animation-heavy. React Native for the Tempu driver and rider apps.',
+        highlights: [
+            'This site: route-level code splitting, one shared data fetch across pages, and scroll-linked hero motion.',
+            'Shared-layout transitions, staggered reveals and pointer-tracked 3D tilt with Motion — with prefers-reduced-motion respected.',
+            'Bilingual Hebrew/English interfaces where RTL is a layout requirement, not a text direction afterthought.',
+            'React Native for the Tempu driver and rider apps, and Vue 3 with shadcn-vue on TextMe.',
+        ],
+        icon: 'code',
+        items: ['React', 'React Native', 'Tailwind CSS', 'Vite', 'Motion', 'HTML', 'CSS'],
+        order: 3,
+    },
+    {
+        title: 'Databases',
+        description: 'Modelling, queries and migrations.',
+        details:
+            'Mostly MongoDB via Mongoose, where the interesting work is schema design: references versus embedding, what deserves its own collection, and which indexes the real query patterns need. ShipOS was the test of that — 45+ models where status history lives in its own logged collections rather than a mutable field, so a lost parcel can actually be traced. Relational work in PostgreSQL and MySQL, Prisma where the schema should be the source of truth, and SQLite for local single-file stores.',
+        highlights: [
+            'ShipOS: 45+ Mongoose models where shipment status history lives in its own logged collections, so a lost parcel can be traced.',
+            'Schema design as the first step — references versus embedding, and indexes chosen from the real query patterns.',
+            'Relational work in PostgreSQL and MySQL, including Prisma-backed Shopify session storage.',
+            'SQLite for local single-file stores — the episodic memory layer in Ultron and the accessibility engine\'s scan ledger.',
+        ],
+        icon: 'database',
+        items: ['MongoDB', 'Mongoose', 'PostgreSQL', 'MySQL', 'Prisma', 'SQLite'],
+        order: 4,
+    },
+    {
+        title: 'E-commerce',
+        description: 'Storefronts and platform apps.',
+        details:
+            'Embedded Shopify apps on the React Router template: OAuth install, Prisma-backed session storage, typed GraphQL Admin API queries with codegen, and Polaris plus App Bridge so navigation, toasts and modals behave natively inside the admin iframe. Beyond the platform, I have built storefronts from scratch — catalog, cart, checkout, orders and a server-authoritative discount engine — plus WooCommerce work, and a scanner that can tell a merchant whether a defect came from their theme or an installed app.',
+        highlights: [
+            'Embedded Shopify apps on the React Router and Remix templates with Polaris and App Bridge, so navigation and modals behave natively in the admin iframe.',
+            'Typed GraphQL Admin API queries with codegen keeping the types honest against the schema.',
+            'A Shopify voucher pipeline: webhook enqueues, a pg-boss worker generates the PDF with Puppeteer and delivers by SES or SMS, with order tags for idempotency.',
+            'WooCommerce plugin work — shipment creation, order import and delivery-slip generation.',
+            'A storefront scanner that diffs server HTML against the rendered DOM to tell a merchant whether a defect came from their theme or an installed app.',
+        ],
+        icon: 'box',
+        items: ['Shopify', 'WooCommerce', 'Shopify GraphQL API', 'Polaris', 'App Bridge'],
+        order: 5,
+    },
+    {
+        title: 'Python, PHP & Laravel',
+        description: 'Beyond the JavaScript stack.',
+        details:
+            'Python is where the AI work lives — FastAPI services, LangChain/LangGraph, local model orchestration. PHP and Laravel came from deliberately building inside a classic MVC framework instead of the SPA-plus-API pattern I default to: Eloquent relationships rather than hand-joined queries, resource controllers and route middleware, Blade composition, and Livewire for the interactive pieces. Worth it for knowing what a framework gives you for free versus what I had been rebuilding by hand.',
+        highlights: [
+            'Python for the AI layer: FastAPI services, LangChain and LangGraph, and local model orchestration on Ollama.',
+            'Laravel across four production products at Matat — ShipOS, TextMe, MYLO and the voucher apps.',
+            'Eloquent relationships, resource controllers and route middleware instead of the hand-rolled equivalents I had been writing in Express.',
+            'Blade composition with Livewire for the interactive pieces, and a Laravel storefront built from scratch.',
+        ],
+        icon: 'terminal',
+        items: ['Python', 'PHP', 'Laravel', 'Blade', 'Livewire'],
+        order: 6,
+    },
+    {
+        title: 'Tools & infra',
+        description: 'Day to day workflow.',
+        details:
+            'Docker Compose for anything with more than one service, so local dev and a deployed instance start the same way — Tempu runs Node, Python and Mongo together behind a Makefile. nginx serving built frontends, Cloudinary for media with publicIds tracked so deletes clean up the remote asset instead of leaking orphans, Playwright for headless browser automation and scanning, Postman and Git for the everyday.',
+        highlights: [
+            'Docker Compose for anything multi-service — Tempu runs Node, Python and Mongo together behind a Makefile.',
+            'nginx serving built frontends, with the React build and the API deployed as separate containers.',
+            'Cloudinary with publicIds tracked alongside URLs, so deleting a record cleans up the remote asset instead of leaking orphans.',
+            'Playwright driving headless Chromium for the accessibility scanner, and Puppeteer for PDF rendering in the voucher worker.',
+        ],
+        icon: 'wrench',
+        items: ['Git', 'Docker', 'Cloudinary', 'Postman', 'Playwright', 'nginx'],
+        order: 7,
+    },
+];
+
+// work history at Matat. Highlights are the changes actually shipped (taken from
+// the commit history on each product), not the product's full feature list.
+const MATAT = { company: 'Matat', companyUrl: 'https://matat.co.il/', location: 'Kathmandu, Nepal' };
+
+const EXPERIENCE = [
+    {
+        ...MATAT,
+        title: 'Software Developer — TextMe',
+        period: 'Aug 2026',
+        current: true,
+        liveUrl: 'https://textme.co.il',
+        description:
+            'TextMe is an SMS marketing and notification app for Shopify and Wix stores — Laravel with Sanctum on the backend, Vue 3 and TypeScript on the front. I worked on the back-in-stock restock notification feature, taking it from store-wide to per-variant control.',
+        highlights: [
+            'Built per-product variant selection for restock notifications, so a merchant can arm alerts on a single size or colour instead of the whole product.',
+            'Added collapsible variant rows to ProductVariantSelect — a product with 40 variants stopped burying the rest of the page.',
+            'Added variant image handling to the picker and the restock block so the row a merchant picks looks like the product they know.',
+            'Fixed restock scope settings silently persisting "all variants" — the save looked successful while quietly discarding the narrower choice the merchant had made.',
+            'Fixed the settings form navigating away on save, so merchants stay on Restock Settings and can see the change landed.',
+            'Rewrote the restock-notification block help text after watching people misread when the back-in-stock form actually appears.',
+        ],
+        techStack: 'Laravel, PHP, Vue, TypeScript, Tailwind CSS, Shopify, MySQL',
+        order: 1,
+    },
+    {
+        ...MATAT,
+        title: 'Backend Developer — ShipOS',
+        period: 'Jul – Aug 2026',
+        current: true,
+        liveUrl: 'https://shipos.co.il',
+        description:
+            'ShipOS is a multi-platform shipping backend — a Laravel app that creates shipments for WooCommerce, Shopify and Wix stores and dispatches them to Israeli carriers (HFD, Zigzag, Cargo, self-pickup), with a WooCommerce plugin and Shopify admin extensions on top. My work was on the merchant-facing settings and diagnostics.',
+        highlights: [
+            'Added branch-pickup package requirements to settings, so merchants see the carrier\'s constraints before enabling the option rather than after a shipment is rejected.',
+            'Surfaced the ShipOS server IPs in the ip_blocked warning — merchants whose host firewalled our callbacks previously saw a dead integration with no way to know what to whitelist.',
+            'Worked inside a codebase where shipment creation is deliberately cache-and-lock protected on all four entry points, because weakening it reintroduces a duplicate-shipment race with real carrier charges attached.',
+        ],
+        techStack: 'Laravel, PHP, MySQL, WooCommerce, Shopify, Wix, REST APIs',
+        order: 2,
+    },
+    {
+        ...MATAT,
+        title: 'Shopify App Developer — Kedem Spa',
+        period: 'Jul 2026',
+        liveUrl: 'https://kedemspahouse.com',
+        description:
+            'An embedded Shopify app (Remix, Polaris, App Bridge) that forwards gift-voucher orders to the EasyBizy gift-card API, renders a PDF voucher with Puppeteer and emails it to the recipient. It runs as two processes against one Postgres — a Remix server that enqueues, and a pg-boss worker that delivers.',
+        highlights: [
+            'Added S3 storage for generated voucher PDFs so a voucher stays retrievable after the delivery email, instead of existing only as an attachment.',
+            'Added SMS notification delivery alongside email, so a recipient with a phone number and no inbox still receives their voucher.',
+            'Allowed staff to send an SMS manually regardless of opt-in status — the automatic path correctly respects consent, but support needed a deliberate override for customers who had asked for it directly.',
+            'Made the voucher balance line dynamic and added a gift-card suffix alias, so the PDF shows the real remaining balance rather than the original face value.',
+        ],
+        techStack: 'Remix, React, Shopify Polaris, App Bridge, Node.js, Prisma, PostgreSQL, AWS S3',
+        order: 3,
+    },
+    {
+        ...MATAT,
+        title: 'Shopify App Developer — BeautyJaffa',
+        period: 'Jul 2026',
+        liveUrl: 'https://beautyspa-jaffa.com',
+        description:
+            'The second storefront running the same EasyBizy voucher platform. Recipient details arrive as Hebrew-named line-item properties on the Shopify order, which is where most of the edge cases live.',
+        highlights: [
+            'Reworked recipient extraction so the Hebrew line-item properties map correctly onto the voucher fields.',
+            'Handled the self-purchase case: a customer buying a voucher for themselves leaves the recipient fields empty, which previously produced a voucher addressed to nobody.',
+        ],
+        techStack: 'Remix, React, Shopify Polaris, App Bridge, Node.js, Prisma, PostgreSQL',
+        order: 4,
+    },
+    {
+        ...MATAT,
+        title: 'Developer — MYLO Loyalty Club',
+        period: 'Jul 2026',
+        description:
+            'A modular Laravel loyalty platform for retail businesses, with a JSON-schema-validated per-business settings layer and a Vue storefront widget.',
+        highlights: [
+            'Fixed the loyalty banner rendering left-to-right on Hebrew storefronts — the "Log in now" link now inherits RTL direction, so the call to action reads correctly for the store\'s actual customers.',
+        ],
+        techStack: 'Laravel, PHP, PostgreSQL, Vue, Docker',
+        order: 5,
+    },
+];
+
+const EDUCATION = [
+    {
+        title: 'Bachelor of Science (Hons) in Information Technology',
+        institution: 'Texas College of Management and IT',
+        affiliation: 'Affiliated with Lincoln University',
+        location: 'Kathmandu, Nepal',
+        period: 'Graduated 2026',
+        kind: 'degree',
+        status: 'Graduated',
+        description:
+            'Four-year honours degree covering programming fundamentals, data structures and algorithms, database systems, software engineering, operating systems, computer networks and web development, finished with a final-year project.',
+        highlights: [
+            'Final-year project: VIntuna, a full-stack e-commerce platform with an AI chat widget, admin console and a server-side discount engine.',
+            'Database systems and data modelling — the relational grounding behind the PostgreSQL and MySQL work, and the reason schema design comes before code for me.',
+            'Data structures and algorithms, operating systems and computer networks — the fundamentals that make debugging a race condition or a retrieval pipeline tractable rather than guesswork.',
+            'Software engineering practice: requirements, version control, documentation and working to a spec rather than to a vibe.',
+        ],
+        techStack: 'JavaScript, Python, PHP, MySQL, HTML, CSS',
+        order: 1,
+    },
+    {
+        title: 'MERN Stack Training',
+        institution: 'Professional training programme',
+        location: 'Kathmandu, Nepal',
+        period: '2026',
+        kind: 'training',
+        status: 'Completed',
+        description:
+            'Intensive hands-on training across the MERN stack — MongoDB, Express, React and Node — building the API-plus-SPA pattern end to end rather than following along with a finished tutorial.',
+        highlights: [
+            'Mongoose schema design: references versus embedding, indexes, and aggregation pipelines instead of over-fetching and filtering in Node.',
+            'Express APIs with JWT access and refresh tokens, httpOnly cookies, and middleware for auth, validation and error handling.',
+            'React with hooks, routing, controlled forms and lifted state, wired to a real API rather than mock data.',
+            'File uploads through Multer to Cloudinary, and the deploy-and-env discipline that comes with running the two halves separately.',
+        ],
+        techStack: 'MongoDB, Express, React, Node.js, Mongoose, JWT, Cloudinary',
+        order: 2,
+    },
+];
+
 const seed = async () => {
     await dbConnect();
 
@@ -199,12 +438,67 @@ const seed = async () => {
         console.log(`  ${String(project.order).padStart(2)}. ${project.title}`);
     }
 
+    for (const service of SERVICES) {
+        await Service.findOneAndUpdate(
+            { title: service.title },
+            { $set: { ...service, isActive: true } },
+            { upsert: true, returnDocument: 'after', setDefaultsOnInsert: true }
+        );
+        console.log(`  skill group ${service.order}. ${service.title}`);
+    }
+    // drop any group the list above no longer covers
+    const { deletedCount } = await Service.deleteMany({
+        title: { $nin: SERVICES.map((s) => s.title) },
+    });
+    console.log(`removed ${deletedCount} stale skill group(s)`);
+
+    for (const entry of EXPERIENCE) {
+        await Experience.findOneAndUpdate(
+            { title: entry.title },
+            { $set: entry },
+            { upsert: true, returnDocument: 'after', setDefaultsOnInsert: true }
+        );
+        console.log(`  role ${entry.order}. ${entry.title}`);
+    }
+    // clear out the placeholder rows the timeline shipped with
+    const removedRoles = await Experience.deleteMany({
+        title: { $nin: EXPERIENCE.map((e) => e.title) },
+    });
+    console.log(`removed ${removedRoles.deletedCount} stale experience entr(ies)`);
+
+    for (const entry of EDUCATION) {
+        await Education.findOneAndUpdate(
+            { title: entry.title },
+            { $set: { ...entry, isActive: true } },
+            { upsert: true, returnDocument: 'after', setDefaultsOnInsert: true }
+        );
+        console.log(`  education ${entry.order}. ${entry.title}`);
+    }
+    const removedEdu = await Education.deleteMany({
+        title: { $nin: EDUCATION.map((e) => e.title) },
+    });
+    console.log(`removed ${removedEdu.deletedCount} stale education entr(ies)`);
+
+    // clear the invented counters ("10+ happy clients") so About falls back to
+    // figures derived from the real content; admin-entered stats still override
+    const about = await About.findOneAndUpdate(
+        {},
+        {
+            $set: { title: 'Software developer, backend-leaning' },
+            // clear the invented counters ("10+ happy clients") so About falls back
+            // to figures derived from the real content; admin stats still override
+            $pull: { stats: { label: /happy clients|projects shipped|years building/i } },
+        },
+        { returnDocument: 'after' }
+    );
+    console.log(about ? `about updated — ${about.stats.length} stat(s) left` : 'no about document');
+
     const hero = await Hero.findOneAndUpdate(
         {},
         {
             $set: {
                 subtitle:
-                    'Full-stack developer building agentic AI, RAG systems and web platforms with Node, React and Python.',
+                    'Software developer building agentic AI, RAG systems and web platforms with Node, React and Python.',
             },
         },
         { returnDocument: 'after' }
@@ -219,7 +513,10 @@ const seed = async () => {
     console.log(footer ? 'footer socials updated' : 'no footer document — skipped');
 
     await mongoose.disconnect();
-    console.log(`content seed done — ${PROJECTS.length} projects`);
+    console.log(
+        `content seed done — ${PROJECTS.length} projects, ${SERVICES.length} skill groups, ` +
+            `${EXPERIENCE.length} roles, ${EDUCATION.length} education entries`
+    );
 };
 
 seed().catch((err) => {

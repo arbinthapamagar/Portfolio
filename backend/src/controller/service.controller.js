@@ -3,6 +3,16 @@ import { asyncHandler } from '../utils/asyncHandler.js';
 import { apiError } from '../utils/apiError.js';
 import { apiResponse } from '../utils/apiResponse.js';
 
+// highlights arrive one-per-line from the admin textarea
+const toLines = (value) => {
+    if (Array.isArray(value)) return value.map((v) => String(v).trim()).filter(Boolean);
+    if (typeof value !== 'string') return undefined;
+    return value
+        .split('\n')
+        .map((line) => line.replace(/^[-*\u2022]\s*/, '').trim())
+        .filter(Boolean);
+};
+
 const toArray = (value) => {
     if (Array.isArray(value)) return value.map((v) => String(v).trim()).filter(Boolean);
     if (typeof value === 'string') {
@@ -15,7 +25,7 @@ const toArray = (value) => {
 };
 
 const serviceController = asyncHandler(async (req, res) => {
-    const { title, description, icon, items, order, isActive } = req.body;
+    const { title, description, details, icon, items, order, isActive } = req.body;
 
     if (!title?.trim()) {
         throw new apiError(400, ' title is required ');
@@ -29,6 +39,8 @@ const serviceController = asyncHandler(async (req, res) => {
     const service = await Service.create({
         title: title.trim(),
         description: description?.trim() || '',
+        details: details?.trim() || '',
+        highlights: toLines(req.body.highlights) || [],
         icon: icon?.trim() || 'sparkles',
         items: itemList,
         order: Number(order) || 0,
@@ -46,7 +58,7 @@ const getAllService = asyncHandler(async (req, res) => {
 });
 
 const serviceEdit = asyncHandler(async (req, res) => {
-    const { title, description, icon, items, order, isActive } = req.body;
+    const { title, description, details, icon, items, order, isActive } = req.body;
 
     const service = await Service.findById(req.params.id);
     if (!service) {
@@ -55,6 +67,9 @@ const serviceEdit = asyncHandler(async (req, res) => {
 
     service.title = title?.trim() || service.title;
     service.description = description?.trim() ?? service.description;
+    if (details !== undefined) service.details = details;
+    const highlights = toLines(req.body.highlights);
+    if (highlights) service.highlights = highlights;
     service.icon = icon?.trim() || service.icon;
 
     if (items !== undefined) {

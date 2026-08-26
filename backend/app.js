@@ -50,6 +50,7 @@ import { heroRouter } from './src/routes/hero.route.js';
 import { aboutRouter } from './src/routes/about.route.js';
 import { footerRouter } from './src/routes/footer.route.js';
 import { sectionHeadingRouter } from './src/routes/sectionHeading.route.js';
+import { educationRouter } from './src/routes/education.route.js';
 
 // route decleration
 
@@ -64,5 +65,6 @@ app.use('/api/v1/hero', heroRouter);
 app.use('/api/v1/about', aboutRouter);
 app.use('/api/v1/footer', footerRouter);
 app.use('/api/v1/sectionHeading', sectionHeadingRouter);
+app.use('/api/v1/education', educationRouter);
 
 export default app;

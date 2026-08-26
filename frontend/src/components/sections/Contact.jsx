@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
-import { Check, Mail, MapPin, Send, TriangleAlert } from 'lucide-react';
+import { Check, Clock, Mail, MapPin, Phone, Send, TriangleAlert } from 'lucide-react';
 import { Github, Linkedin } from '../ui/BrandIcons';
 import { apiMessage, publicApi } from '../../lib/api';
 import SectionHeader from '../ui/SectionHeader';
@@ -42,11 +42,11 @@ export default function Contact({ heading, footer }) {
     };
 
     return (
-        <section id="contact" className="relative px-6 py-28 lg:py-36">
+        <section id="contact" className="relative overflow-hidden px-6 py-28 lg:py-36">
             <div
                 aria-hidden="true"
                 className="pointer-events-none absolute bottom-0 left-1/2 h-[26rem] w-[50rem] -translate-x-1/2 rounded-full opacity-45 blur-[140px]"
-                style={{ background: 'radial-gradient(circle, rgba(139,92,246,0.20), transparent 70%)' }}
+                style={{ background: 'radial-gradient(circle, rgba(111,92,216,0.26), transparent 70%)' }}
             />
 
             <div className="relative mx-auto max-w-6xl">
@@ -96,7 +96,7 @@ export default function Contact({ heading, footer }) {
                                 variants={fadeUp}
                                 className="glass flex items-center gap-4 rounded-2xl p-5"
                             >
-                                <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-cyan-glow/15 text-cyan-glow">
+                                <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-berry-400/15 text-berry-400">
                                     <MapPin className="h-4 w-4" />
                                 </span>
                                 <span>
@@ -108,6 +108,55 @@ export default function Contact({ heading, footer }) {
                             </motion.div>
                         )}
 
+                        {footer?.phone && (
+                            <motion.a
+                                variants={fadeUp}
+                                href={`tel:${String(footer.phone).replace(/\s+/g, '')}`}
+                                whileHover={{ x: 5 }}
+                                transition={{ type: 'spring', stiffness: 320, damping: 22 }}
+                                className="glass flex items-center gap-4 rounded-2xl p-5"
+                            >
+                                <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-glow-500/15 text-glow-300">
+                                    <Phone className="h-4 w-4" />
+                                </span>
+                                <span>
+                                    <span className="block font-mono text-[10px] tracking-widest text-mist-600 uppercase">
+                                        Phone
+                                    </span>
+                                    <span className="block text-sm text-mist-200">{footer.phone}</span>
+                                </span>
+                            </motion.a>
+                        )}
+
+                        {/* balances the column against the form, and answers the
+                            question everyone actually has before writing */}
+                        <motion.div
+                            variants={fadeUp}
+                            className="glass glow-ring rounded-2xl p-5"
+                        >
+                            <div className="flex items-center gap-4">
+                                <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-emerald-400/12 text-emerald-300">
+                                    <Clock className="h-4 w-4" />
+                                </span>
+                                <span>
+                                    <span className="block font-mono text-[10px] tracking-widest text-mist-600 uppercase">
+                                        Availability
+                                    </span>
+                                    <span className="flex items-center gap-2 text-sm text-mist-200">
+                                        <span className="relative flex h-1.5 w-1.5">
+                                            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
+                                            <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-emerald-400" />
+                                        </span>
+                                        Open to work
+                                    </span>
+                                </span>
+                            </div>
+                            <p className="mt-4 border-t border-white/[0.06] pt-4 text-xs leading-relaxed text-mist-500">
+                                Software development and AI/RAG work, freelance or full time. I read every
+                                message and usually reply within a day.
+                            </p>
+                        </motion.div>
+
                         <motion.div variants={fadeUp} className="flex gap-2.5">
                             {footer?.githubUrl && (
                                 <motion.a
@@ -116,9 +165,10 @@ export default function Contact({ heading, footer }) {
                                     rel="noreferrer"
                                     aria-label="GitHub"
                                     whileHover={{ y: -4 }}
-                                    className="glass grid h-12 flex-1 place-items-center rounded-xl text-mist-300 transition-colors hover:text-glow-300"
+                                    className="glass flex h-12 flex-1 items-center justify-center gap-2.5 rounded-xl text-mist-300 transition-colors hover:text-glow-300"
                                 >
                                     <Github className="h-4 w-4" />
+                                    <span className="font-mono text-xs">GitHub</span>
                                 </motion.a>
                             )}
                             {footer?.linkedinUrl && (
@@ -128,9 +178,10 @@ export default function Contact({ heading, footer }) {
                                     rel="noreferrer"
                                     aria-label="LinkedIn"
                                     whileHover={{ y: -4 }}
-                                    className="glass grid h-12 flex-1 place-items-center rounded-xl text-mist-300 transition-colors hover:text-glow-300"
+                                    className="glass flex h-12 flex-1 items-center justify-center gap-2.5 rounded-xl text-mist-300 transition-colors hover:text-glow-300"
                                 >
                                     <Linkedin className="h-4 w-4" />
+                                    <span className="font-mono text-xs">LinkedIn</span>
                                 </motion.a>
                             )}
                         </motion.div>

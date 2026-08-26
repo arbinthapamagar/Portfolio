@@ -13,7 +13,7 @@ export default function Tilt({ children, className = '', max = 9, sheen = true }
 
     const sheenX = useTransform(px, (v) => `${v * 100}%`);
     const sheenY = useTransform(py, (v) => `${v * 100}%`);
-    const sheenBg = useMotionTemplate`radial-gradient(340px circle at ${sheenX} ${sheenY}, rgba(167,139,250,0.18), transparent 65%)`;
+    const sheenBg = useMotionTemplate`radial-gradient(340px circle at ${sheenX} ${sheenY}, rgba(223,199,155,0.15), transparent 65%)`;
 
     const handleMove = (event) => {
         const rect = ref.current?.getBoundingClientRect();

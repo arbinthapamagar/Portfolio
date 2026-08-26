@@ -50,7 +50,7 @@ export default function Login() {
                         initial={{ rotate: -12, scale: 0.8 }}
                         animate={{ rotate: 0, scale: 1 }}
                         transition={{ type: 'spring', stiffness: 260, damping: 16, delay: 0.15 }}
-                        className="mx-auto mb-4 grid h-12 w-12 place-items-center rounded-xl bg-glow-500 font-display text-lg font-bold text-white"
+                        className="mx-auto mb-4 grid h-12 w-12 place-items-center rounded-xl bg-glow-500 font-display text-lg font-bold text-ink-950"
                     >
                         A
                     </motion.span>
@@ -105,7 +105,7 @@ export default function Login() {
                     disabled={busy}
                     whileHover={{ y: -2 }}
                     whileTap={{ scale: 0.98 }}
-                    className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-glow-500 py-3 text-sm font-medium text-white transition-colors hover:bg-glow-400 disabled:opacity-60"
+                    className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-glow-500 py-3 text-sm font-medium text-ink-950 transition-colors hover:bg-glow-400 disabled:opacity-60"
                 >
                     <LogIn className="h-4 w-4" />
                     {busy ? 'Signing in…' : 'Sign in'}

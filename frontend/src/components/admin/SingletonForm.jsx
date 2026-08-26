@@ -126,7 +126,7 @@ export default function SingletonForm({
                     disabled={saving}
                     whileHover={{ y: -2 }}
                     whileTap={{ scale: 0.98 }}
-                    className="mt-6 rounded-xl bg-glow-500 px-6 py-2.5 text-sm font-medium text-white transition-colors hover:bg-glow-400 disabled:opacity-60"
+                    className="mt-6 rounded-xl bg-glow-500 px-6 py-2.5 text-sm font-medium text-ink-950 transition-colors hover:bg-glow-400 disabled:opacity-60"
                 >
                     {saving ? 'Saving…' : 'Save changes'}
                 </motion.button>

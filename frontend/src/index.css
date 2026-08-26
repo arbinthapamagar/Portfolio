@@ -1,24 +1,31 @@
 @import 'tailwindcss';
 
 @theme {
-    /* dark + violet glow palette */
-    --color-ink-950: #07070b;
-    --color-ink-900: #0a0a0f;
-    --color-ink-850: #0e0e15;
-    --color-ink-800: #13131c;
-    --color-ink-700: #1c1c28;
-    --color-ink-600: #2a2a3a;
+    /* base: dark blue with a cherry undertone — deliberately not black */
+    --color-ink-950: #100d26;
+    --color-ink-900: #171334;
+    --color-ink-850: #1d1840;
+    --color-ink-800: #251f4f;
+    --color-ink-700: #302863;
+    --color-ink-600: #453a85;
 
-    --color-mist-100: #f4f4f8;
-    --color-mist-300: #c9c9d6;
-    --color-mist-500: #8b8ba3;
-    --color-mist-600: #6c6c85;
+    /* text runs warm so it reads as cream against the blue */
+    --color-mist-100: #fdf8ec;
+    --color-mist-300: #e7dcc4;
+    --color-mist-500: #a99e93;
+    --color-mist-600: #857a72;
 
-    --color-glow-300: #c4b5fd;
-    --color-glow-400: #a78bfa;
-    --color-glow-500: #8b5cf6;
-    --color-glow-600: #7c3aed;
-    --color-cyan-glow: #22d3ee;
+    /* first accent — cream. glow-500 is every filled surface */
+    --color-glow-300: #f8efdc;
+    --color-glow-400: #eeddbe;
+    --color-glow-500: #dfc79b;
+    --color-glow-600: #c2a878;
+
+    /* second accent — blueberry, the cool half of every gradient */
+    --color-berry-300: #a99cf5;
+    --color-berry-400: #8b7ce8;
+    --color-berry-500: #6f5cd8;
+    --color-berry-600: #5844bd;
 
     --font-display: 'Space Grotesk', ui-sans-serif, system-ui, sans-serif;
     --font-body: 'Inter', ui-sans-serif, system-ui, sans-serif;
@@ -58,7 +65,7 @@
 
     ::selection {
         background: var(--color-glow-500);
-        color: white;
+        color: var(--color-ink-950);
     }
 
     ::-webkit-scrollbar {
@@ -99,10 +106,10 @@
         padding: 1px;
         background: linear-gradient(
             135deg,
-            color-mix(in oklab, var(--color-glow-400) 70%, transparent),
+            color-mix(in oklab, var(--color-glow-400) 60%, transparent),
             transparent 40%,
             transparent 60%,
-            color-mix(in oklab, var(--color-cyan-glow) 55%, transparent)
+            color-mix(in oklab, var(--color-berry-400) 55%, transparent)
         );
         -webkit-mask:
             linear-gradient(#000 0 0) content-box,

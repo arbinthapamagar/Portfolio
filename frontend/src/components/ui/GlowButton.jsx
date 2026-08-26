@@ -19,8 +19,8 @@ export default function GlowButton({
 
     const skin =
         variant === 'primary'
-            ? 'bg-glow-500 text-white shadow-[0_0_34px_-6px_rgba(139,92,246,0.75)] hover:bg-glow-400'
-            : 'border border-white/15 bg-white/[0.03] text-mist-100 hover:border-glow-400/50 hover:text-white';
+            ? 'bg-glow-500 text-ink-950 shadow-[0_0_34px_-6px_rgba(223,199,155,0.5)] hover:bg-glow-400'
+            : 'border border-white/15 bg-white/[0.03] text-mist-100 hover:border-glow-400/50 hover:text-glow-300';
 
     const button = (
         <MotionTag

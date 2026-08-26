@@ -12,6 +12,7 @@ const SECTIONS = [
     { key: 'skills', label: 'Skills' },
     { key: 'projects', label: 'Projects' },
     { key: 'experience', label: 'Experience' },
+    { key: 'education', label: 'Education' },
     { key: 'testimonials', label: 'Testimonials' },
     { key: 'contact', label: 'Contact' },
 ];
@@ -124,7 +125,7 @@ export default function AdminHeadings() {
                             type="button"
                             onClick={() => save(key)}
                             disabled={savingKey === key}
-                            className="mt-4 rounded-lg bg-glow-500 px-4 py-2 text-xs font-medium text-white transition-colors hover:bg-glow-400 disabled:opacity-60"
+                            className="mt-4 rounded-lg bg-glow-500 px-4 py-2 text-xs font-medium text-ink-950 transition-colors hover:bg-glow-400 disabled:opacity-60"
                         >
                             {savingKey === key ? 'Saving…' : 'Save'}
                         </button>

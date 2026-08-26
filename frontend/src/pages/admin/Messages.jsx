@@ -112,7 +112,7 @@ export default function AdminMessages() {
                                                 <div className="mt-5 flex gap-3">
                                                     <a
                                                         href={`mailto:${message.email}?subject=Re: ${encodeURIComponent(message.subject || '')}`}
-                                                        className="rounded-lg bg-glow-500 px-4 py-2 text-xs font-medium text-white hover:bg-glow-400"
+                                                        className="rounded-lg bg-glow-500 px-4 py-2 text-xs font-medium text-ink-950 hover:bg-glow-400"
                                                     >
                                                         Reply
                                                     </a>

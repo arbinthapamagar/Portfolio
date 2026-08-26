@@ -8,7 +8,7 @@ import { EASE } from '../motion/variants';
 
 const FALLBACK = {
     title: 'Arbeen Thapa Magar',
-    subtitle: 'Full-stack developer building agentic AI, RAG systems and web platforms.',
+    subtitle: 'Software developer building agentic AI, RAG systems and web platforms.',
     buttonText: 'View my work',
     buttonLink: '#projects',
 };
@@ -76,7 +76,7 @@ export default function Hero({ hero, tickerItems = [] }) {
                                 transition={{ duration: 0.9, ease: EASE, delay: 0.1 + i * 0.09 }}
                             >
                                 {i === words.length - 1 ? (
-                                    <span className="glow-text bg-gradient-to-br from-glow-300 via-glow-400 to-cyan-glow bg-clip-text text-transparent">
+                                    <span className="glow-text bg-gradient-to-br from-glow-300 via-glow-400 to-berry-400 bg-clip-text text-transparent">
                                         {word}
                                     </span>
                                 ) : (

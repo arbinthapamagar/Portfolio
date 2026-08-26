@@ -87,7 +87,12 @@ export default function ResourceManager({
         const next = blankFrom(fields);
         for (const key of Object.keys(next)) {
             const value = base?.[key];
-            next[key] = Array.isArray(value) ? value.join(', ') : (value ?? next[key]);
+            // textarea fields hold one entry per line (experience highlights);
+            // everything else is a comma-separated single line
+            const isMultiline = fields.find((f) => f.name === key)?.type === 'textarea';
+            next[key] = Array.isArray(value)
+                ? value.join(isMultiline ? '\n' : ', ')
+                : (value ?? next[key]);
         }
         setForm(next);
         setFiles({});
@@ -161,7 +166,7 @@ export default function ResourceManager({
                     onClick={openCreate}
                     whileHover={{ y: -2 }}
                     whileTap={{ scale: 0.97 }}
-                    className="inline-flex items-center gap-2 rounded-full bg-glow-500 px-5 py-2.5 text-sm font-medium text-white shadow-[0_0_28px_-8px_rgba(139,92,246,0.8)] transition-colors hover:bg-glow-400"
+                    className="inline-flex items-center gap-2 rounded-full bg-glow-500 px-5 py-2.5 text-sm font-medium text-ink-950 shadow-[0_0_28px_-8px_rgba(139,92,246,0.8)] transition-colors hover:bg-glow-400"
                 >
                     <Plus className="h-4 w-4" /> New
                 </motion.button>
@@ -256,7 +261,7 @@ export default function ResourceManager({
                                     type="button"
                                     aria-label="Close"
                                     onClick={() => setOpen(false)}
-                                    className="grid h-8 w-8 place-items-center rounded-lg text-mist-500 hover:text-white"
+                                    className="grid h-8 w-8 place-items-center rounded-lg text-mist-500 hover:text-mist-100"
                                 >
                                     <X className="h-4 w-4" />
                                 </button>
@@ -282,14 +287,14 @@ export default function ResourceManager({
                                 <button
                                     type="submit"
                                     disabled={saving}
-                                    className="flex-1 rounded-xl bg-glow-500 py-2.5 text-sm font-medium text-white transition-colors hover:bg-glow-400 disabled:opacity-60"
+                                    className="flex-1 rounded-xl bg-glow-500 py-2.5 text-sm font-medium text-ink-950 transition-colors hover:bg-glow-400 disabled:opacity-60"
                                 >
                                     {saving ? 'Saving…' : editing ? 'Save changes' : 'Create'}
                                 </button>
                                 <button
                                     type="button"
                                     onClick={() => setOpen(false)}
-                                    className="rounded-xl border border-white/10 px-5 text-sm text-mist-400 hover:text-white"
+                                    className="rounded-xl border border-white/10 px-5 text-sm text-mist-400 hover:text-mist-100"
                                 >
                                     Cancel
                                 </button>
@@ -332,7 +337,7 @@ export default function ResourceManager({
                                 <button
                                     type="button"
                                     onClick={() => setConfirming(null)}
-                                    className="rounded-xl border border-white/10 px-5 text-sm text-mist-400 hover:text-white"
+                                    className="rounded-xl border border-white/10 px-5 text-sm text-mist-400 hover:text-mist-100"
                                 >
                                     Cancel
                                 </button>

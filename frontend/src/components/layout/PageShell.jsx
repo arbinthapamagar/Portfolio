@@ -25,7 +25,7 @@ function Pager({ path }) {
                 <Magnetic strength={0.2}>
                     <Link
                         to={prev.path}
-                        className="group flex flex-col gap-1 text-left transition-colors hover:text-white"
+                        className="group flex flex-col gap-1 text-left transition-colors hover:text-mist-100"
                     >
                         <span className="font-mono text-[11px] tracking-[0.2em] text-mist-600 uppercase">
                             Previous
@@ -44,7 +44,7 @@ function Pager({ path }) {
                 <Magnetic strength={0.2}>
                     <Link
                         to={next.path}
-                        className="group flex flex-col gap-1 text-right transition-colors hover:text-white"
+                        className="group flex flex-col gap-1 text-right transition-colors hover:text-mist-100"
                     >
                         <span className="font-mono text-[11px] tracking-[0.2em] text-mist-600 uppercase">
                             Next
@@ -97,8 +97,12 @@ export default function PageShell({ path, title, children }) {
                 />
             </div>
 
-            {/* the sections carry their own py-28; trim the top so it isn't doubled */}
-            <div className="[&>section]:pt-12 [&>section]:lg:pt-16">{children}</div>
+            {/* the sections carry their own py-28 top and bottom; trim the first
+                one's top and the last one's bottom so it isn't doubled up
+                against the header rule and the pager */}
+            <div className="[&>section+section]:pt-10 [&>section:not(:last-child)]:pb-14 [&>section:first-child]:pt-12 [&>section:last-child]:pb-10 [&>section:first-child]:lg:pt-16">
+                {children}
+            </div>
 
             <Pager path={path} />
         </div>

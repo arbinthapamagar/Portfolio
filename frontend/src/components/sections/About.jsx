@@ -1,22 +1,40 @@
 import { motion } from 'motion/react';
-import { Download } from 'lucide-react';
+import { Briefcase, Download, GraduationCap, MapPin, Sparkles } from 'lucide-react';
 import Reveal from '../motion/Reveal';
 import Parallax from '../motion/Parallax';
 import Counter from '../motion/Counter';
 import Marquee from '../motion/Marquee';
 import SectionHeader from '../ui/SectionHeader';
 import GlowButton from '../ui/GlowButton';
-import { stagger, fadeUp } from '../motion/variants';
+import TechIcon from '../ui/TechIcon';
+import { stagger, fadeUp, EASE } from '../motion/variants';
 
-const FALLBACK_STATS = [
-    { value: '3+', label: 'Years building' },
-    { value: '15+', label: 'Projects shipped' },
-    { value: '10+', label: 'Happy clients' },
-];
+/* A row of counters nobody can check is worse than no counters, so these are
+   derived from what the site actually contains. Admin-entered stats still win. */
+function derivedStats({ projects, experience, services }) {
+    const techCount = new Set(services.flatMap((s) => s.items || [])).size;
+    return [
+        { value: String(projects.length), label: 'Projects built' },
+        { value: String(experience.length), label: 'Products shipped on' },
+        { value: String(techCount), label: 'Technologies' },
+    ].filter((s) => s.value !== '0');
+}
 
-export default function About({ about, heading }) {
-    const stats = about?.stats?.length ? about.stats : FALLBACK_STATS;
+export default function About({
+    about,
+    heading,
+    projects = [],
+    experience = [],
+    education = [],
+    services = [],
+    footer,
+}) {
+    const derived = derivedStats({ projects, experience, services });
+    const stats = about?.stats?.length ? about.stats : derived;
     const ticker = about?.tickerItems?.length ? about.tickerItems : [];
+    const currentRole = experience.find((e) => e.current) || experience[0] || null;
+    const degree = education.find((e) => e.kind === 'degree') || education[0] || null;
+    const topStack = [...new Set(services.flatMap((s) => s.items || []))].slice(0, 10);
 
     return (
         <section id="about" className="relative overflow-hidden px-6 py-28 lg:py-36">
@@ -34,7 +52,7 @@ export default function About({ about, heading }) {
                     <div>
                         <Reveal>
                             <h3 className="font-display text-2xl font-semibold text-mist-100">
-                                {about?.title || 'Full-stack developer, backend-leaning'}
+                                {about?.title || 'Software developer, backend-leaning'}
                             </h3>
                         </Reveal>
 
@@ -93,37 +111,152 @@ export default function About({ about, heading }) {
                         </Reveal>
                     </div>
 
-                    <Parallax speed={45} className="hidden lg:block">
+                    <Parallax speed={38} className="lg:sticky lg:top-32">
                         <div className="group relative">
-                            <div className="absolute -inset-3 rounded-[2rem] bg-gradient-to-br from-glow-500/25 via-transparent to-cyan-glow/20 blur-2xl transition-opacity duration-500 group-hover:opacity-100" />
-                            <motion.div
-                                whileHover={{ scale: 1.015 }}
-                                transition={{ type: 'spring', stiffness: 220, damping: 22 }}
-                                className="glass relative aspect-[4/5] overflow-hidden rounded-[1.75rem]"
-                            >
-                                {about?.photo ? (
+                            <div className="absolute -inset-3 rounded-[2rem] bg-gradient-to-br from-glow-500/20 via-transparent to-berry-400/20 blur-2xl" />
+
+                            {about?.photo ? (
+                                <motion.div
+                                    whileHover={{ scale: 1.015 }}
+                                    transition={{ type: 'spring', stiffness: 220, damping: 22 }}
+                                    className="glass relative aspect-[4/5] overflow-hidden rounded-[1.75rem]"
+                                >
                                     <img
                                         src={about.photo}
                                         alt={about?.title || 'Portrait'}
                                         loading="lazy"
                                         className="h-full w-full object-cover"
                                     />
-                                ) : (
-                                    <div className="grid h-full w-full place-items-center bg-gradient-to-br from-ink-800 to-ink-850">
-                                        <span className="font-display text-7xl font-bold text-white/5">
-                                            AT
-                                        </span>
-                                    </div>
-                                )}
-                                <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-ink-950/70 via-transparent to-transparent" />
-                            </motion.div>
+                                    <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-ink-950/70 via-transparent to-transparent" />
+                                </motion.div>
+                            ) : (
+                                /* no portrait uploaded — a real snapshot beats an empty
+                                   monogram card holding open a column of dead space */
+                                <motion.div
+                                    initial={{ opacity: 0, y: 24 }}
+                                    whileInView={{ opacity: 1, y: 0 }}
+                                    viewport={{ once: true, amount: 'some' }}
+                                    transition={{ duration: 0.7, ease: EASE }}
+                                    className="glass glow-ring relative overflow-hidden rounded-[1.75rem] p-7"
+                                >
+                                    <p className="font-mono text-[10px] tracking-[0.2em] text-mist-600 uppercase">
+                                        At a glance
+                                    </p>
+
+                                    <dl className="mt-6 flex flex-col gap-5">
+                                        {currentRole && (
+                                            <div className="flex gap-3.5">
+                                                <span className="mt-0.5 grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-glow-500/15 text-glow-300">
+                                                    <Briefcase className="h-4 w-4" />
+                                                </span>
+                                                <div className="min-w-0">
+                                                    <dt className="font-mono text-[10px] tracking-widest text-mist-600 uppercase">
+                                                        Currently
+                                                    </dt>
+                                                    <dd className="mt-1 text-sm leading-snug text-mist-200">
+                                                        {currentRole.title}
+                                                        {currentRole.company && (
+                                                            <>
+                                                                {' at '}
+                                                                {currentRole.companyUrl ? (
+                                                                    <a
+                                                                        href={currentRole.companyUrl}
+                                                                        target="_blank"
+                                                                        rel="noreferrer"
+                                                                        className="text-glow-300 underline decoration-glow-500/40 underline-offset-2"
+                                                                    >
+                                                                        {currentRole.company}
+                                                                    </a>
+                                                                ) : (
+                                                                    currentRole.company
+                                                                )}
+                                                            </>
+                                                        )}
+                                                    </dd>
+                                                </div>
+                                            </div>
+                                        )}
+
+                                        {degree && (
+                                            <div className="flex gap-3.5">
+                                                <span className="mt-0.5 grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-berry-400/15 text-berry-300">
+                                                    <GraduationCap className="h-4 w-4" />
+                                                </span>
+                                                <div className="min-w-0">
+                                                    <dt className="font-mono text-[10px] tracking-widest text-mist-600 uppercase">
+                                                        Education
+                                                    </dt>
+                                                    <dd className="mt-1 text-sm leading-snug text-mist-200">
+                                                        {degree.title}
+                                                    </dd>
+                                                    {degree.institution && (
+                                                        <dd className="mt-0.5 text-xs text-mist-500">
+                                                            {degree.institution}
+                                                        </dd>
+                                                    )}
+                                                </div>
+                                            </div>
+                                        )}
+
+                                        {footer?.location && (
+                                            <div className="flex gap-3.5">
+                                                <span className="mt-0.5 grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-glow-500/15 text-glow-300">
+                                                    <MapPin className="h-4 w-4" />
+                                                </span>
+                                                <div>
+                                                    <dt className="font-mono text-[10px] tracking-widest text-mist-600 uppercase">
+                                                        Based in
+                                                    </dt>
+                                                    <dd className="mt-1 text-sm text-mist-200">
+                                                        {footer.location}
+                                                    </dd>
+                                                </div>
+                                            </div>
+                                        )}
+                                    </dl>
+
+                                    {topStack.length > 0 && (
+                                        <div className="mt-7 border-t border-white/[0.06] pt-6">
+                                            <p className="flex items-center gap-2 font-mono text-[10px] tracking-widest text-mist-600 uppercase">
+                                                <Sparkles className="h-3 w-3 text-glow-400/70" />
+                                                Working with
+                                            </p>
+                                            <motion.ul
+                                                className="mt-4 flex flex-wrap gap-2"
+                                                initial="hidden"
+                                                whileInView="show"
+                                                viewport={{ once: true, amount: 'some' }}
+                                                variants={{
+                                                    hidden: {},
+                                                    show: { transition: { staggerChildren: 0.04 } },
+                                                }}
+                                            >
+                                                {topStack.map((tech) => (
+                                                    <motion.li
+                                                        key={tech}
+                                                        variants={{
+                                                            hidden: { opacity: 0, scale: 0.8 },
+                                                            show: { opacity: 1, scale: 1 },
+                                                        }}
+                                                        whileHover={{ y: -3 }}
+                                                        title={tech}
+                                                        className="grid h-9 w-9 place-items-center rounded-lg border border-white/[0.07] bg-white/[0.03]"
+                                                    >
+                                                        <TechIcon name={tech} className="h-4 w-4" />
+                                                    </motion.li>
+                                                ))}
+                                            </motion.ul>
+                                        </div>
+                                    )}
+                                </motion.div>
+                            )}
                         </div>
                     </Parallax>
                 </div>
             </div>
 
             {ticker.length > 0 && (
-                <div className="mt-20">
+                <div className="mt-16">
                     <Marquee items={ticker} duration={34} reverse />
                 </div>
             )}

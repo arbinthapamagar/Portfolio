@@ -11,6 +11,7 @@ import { Link } from 'react-router-dom';
 import SectionHeader from '../ui/SectionHeader';
 import EmptyState from '../ui/EmptyState';
 import Tilt from '../motion/Tilt';
+import TechIcon from '../ui/TechIcon';
 import { EASE } from '../motion/variants';
 
 function ProjectCard({ project, index }) {
@@ -21,7 +22,7 @@ function ProjectCard({ project, index }) {
     // pointer-tracked spotlight, kept in motion values so it never re-renders
     const mx = useMotionValue(50);
     const my = useMotionValue(50);
-    const spotlight = useMotionTemplate`radial-gradient(420px circle at ${mx}% ${my}%, rgba(139,92,246,0.16), transparent 70%)`;
+    const spotlight = useMotionTemplate`radial-gradient(420px circle at ${mx}% ${my}%, rgba(139,124,232,0.17), transparent 70%)`;
 
     const trackPointer = (event) => {
         const rect = ref.current?.getBoundingClientRect();
@@ -36,7 +37,10 @@ function ProjectCard({ project, index }) {
             initial={{ opacity: 0, y: 48, scale: 0.97 }}
             whileInView={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -20, scale: 0.97 }}
-            viewport={{ once: true, amount: 0.15 }}
+            // 'some' rather than a ratio: these cards are ~680px tall, so a
+            // fractional threshold never resolves for the first row on a short
+            // viewport and the reveal would never fire
+            viewport={{ once: true, amount: 'some' }}
             transition={{ duration: 0.75, ease: EASE, delay: (index % 3) * 0.09 }}
             onMouseEnter={() => setHovered(true)}
             onMouseLeave={() => setHovered(false)}
@@ -84,7 +88,7 @@ function ProjectCard({ project, index }) {
                                 <motion.span
                                     animate={{ scale: hovered ? 1.15 : 1, opacity: hovered ? 0.12 : 0.06 }}
                                     transition={{ duration: 0.6, ease: EASE }}
-                                    className="relative font-display text-6xl font-bold text-white"
+                                    className="relative font-display text-6xl font-bold text-mist-100"
                                 >
                                     {project.title?.charAt(0)}
                                 </motion.span>
@@ -94,7 +98,7 @@ function ProjectCard({ project, index }) {
                         <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-ink-900 via-ink-900/20 to-transparent" />
 
                         {/* running index, top-right */}
-                        <span className="absolute top-3 right-3 font-mono text-[11px] tracking-widest text-white/25">
+                        <span className="absolute top-3 right-3 font-mono text-[11px] tracking-widest text-mist-100/25">
                             {String(index + 1).padStart(2, '0')}
                         </span>
 
@@ -126,7 +130,7 @@ function ProjectCard({ project, index }) {
                                             aria-label={`${project.title} live demo`}
                                             whileHover={{ scale: 1.12, rotate: 8 }}
                                             whileTap={{ scale: 0.94 }}
-                                            className="grid h-10 w-10 place-items-center rounded-xl bg-glow-500 text-white transition-colors hover:bg-glow-400"
+                                            className="grid h-10 w-10 place-items-center rounded-xl bg-glow-500 text-ink-950 transition-colors hover:bg-glow-400"
                                         >
                                             <ArrowUpRight className="h-4 w-4" />
                                         </motion.a>
@@ -139,7 +143,7 @@ function ProjectCard({ project, index }) {
                                             aria-label={`${project.title} source`}
                                             whileHover={{ scale: 1.12, rotate: -8 }}
                                             whileTap={{ scale: 0.94 }}
-                                            className="grid h-10 w-10 place-items-center rounded-xl border border-white/15 bg-ink-950/85 text-mist-200 backdrop-blur transition-colors hover:text-white"
+                                            className="grid h-10 w-10 place-items-center rounded-xl border border-white/15 bg-ink-950/85 text-mist-300 backdrop-blur transition-colors hover:text-mist-100"
                                         >
                                             <Github className="h-4 w-4" />
                                         </motion.a>
@@ -183,8 +187,9 @@ function ProjectCard({ project, index }) {
                                     key={tech}
                                     variants={{ rest: { y: 0 }, lift: { y: -2 } }}
                                     transition={{ type: 'spring', stiffness: 400, damping: 24 }}
-                                    className="rounded-md border border-white/[0.07] bg-white/[0.03] px-2 py-0.5 font-mono text-[10px] text-mist-400"
+                                    className="flex items-center gap-1.5 rounded-md border border-white/[0.07] bg-white/[0.03] px-2 py-1 font-mono text-[10px] text-mist-400"
                                 >
+                                    <TechIcon name={tech} className="h-3 w-3" />
                                     {tech}
                                 </motion.li>
                             ))}
@@ -271,7 +276,7 @@ export default function Projects({ projects = [], heading, limit }) {
                                 )}
                                 <span
                                     className={`relative z-10 ${
-                                        filter === tag ? 'text-white' : 'text-mist-500 hover:text-mist-300'
+                                        filter === tag ? 'text-ink-950' : 'text-mist-500 hover:text-mist-300'
                                     }`}
                                 >
                                     {tag}

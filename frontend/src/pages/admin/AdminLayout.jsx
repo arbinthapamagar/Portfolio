@@ -1,7 +1,7 @@
 import { NavLink, Navigate, Outlet, useLocation } from 'react-router-dom';
 import { AnimatePresence, motion } from 'motion/react';
 import {
-    Briefcase, Building2, FileText, FolderKanban, Home, LayoutDashboard,
+    Briefcase, Building2, FileText, FolderKanban, GraduationCap, Home, LayoutDashboard,
     LogOut, Mail, MessageSquareQuote, PanelsTopLeft, Sparkles, Type,
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
@@ -15,6 +15,7 @@ const NAV = [
     { to: '/admin/skills', label: 'Skills', Icon: Sparkles },
     { to: '/admin/projects', label: 'Projects', Icon: FolderKanban },
     { to: '/admin/experience', label: 'Experience', Icon: Briefcase },
+    { to: '/admin/education', label: 'Education', Icon: GraduationCap },
     { to: '/admin/testimonials', label: 'Testimonials', Icon: MessageSquareQuote },
     { to: '/admin/clients', label: 'Clients', Icon: Building2 },
     { to: '/admin/headings', label: 'Headings', Icon: Type },
@@ -40,7 +41,7 @@ export default function AdminLayout() {
         <div className="flex min-h-screen bg-ink-950">
             <aside className="sticky top-0 hidden h-screen w-60 shrink-0 flex-col border-r border-white/[0.06] bg-ink-900 lg:flex">
                 <div className="flex items-center gap-2.5 border-b border-white/[0.06] px-5 py-4">
-                    <span className="grid h-8 w-8 place-items-center rounded-lg bg-glow-500 font-display text-sm font-bold text-white">
+                    <span className="grid h-8 w-8 place-items-center rounded-lg bg-glow-500 font-display text-sm font-bold text-ink-950">
                         A
                     </span>
                     <span className="font-display text-sm font-semibold">Portfolio CMS</span>
@@ -56,7 +57,7 @@ export default function AdminLayout() {
                                     className={({ isActive }) =>
                                         `relative flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm transition-colors ${
                                             isActive
-                                                ? 'text-white'
+                                                ? 'text-mist-100'
                                                 : 'text-mist-500 hover:text-mist-200'
                                         }`
                                     }
@@ -102,7 +103,7 @@ export default function AdminLayout() {
                             end={end}
                             className={({ isActive }) =>
                                 `shrink-0 rounded-full px-3 py-1.5 text-xs whitespace-nowrap transition-colors ${
-                                    isActive ? 'bg-glow-500 text-white' : 'text-mist-500'
+                                    isActive ? 'bg-glow-500 text-ink-950' : 'text-mist-500'
                                 }`
                             }
                         >

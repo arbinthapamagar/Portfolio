@@ -25,7 +25,7 @@ export default function Footer({ footer }) {
                     whileInView={{ opacity: 0.045, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ duration: 1.1, ease: [0.22, 1, 0.36, 1] }}
-                    className="text-center font-display text-[18vw] leading-none font-bold tracking-tighter text-white"
+                    className="text-center font-display text-[18vw] leading-none font-bold tracking-tighter text-mist-100"
                 >
                     ARBEEN
                 </motion.p>

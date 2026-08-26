@@ -53,6 +53,8 @@ export const publicApi = {
     project: (id) => api.get(`/project/getProject/${id}`).then(unwrap),
     experience: () =>
         api.get('/experience/getExperience?limit=0').then((r) => unwrap(r)?.experience ?? []),
+    experienceItem: (id) => api.get(`/experience/getExperience/${id}`).then(unwrap),
+    education: () => api.get('/education/getEducation').then((r) => unwrap(r)?.education ?? []),
     testimonials: () =>
         api.get('/testimonial/getTestimonial?limit=0').then((r) => unwrap(r)?.testimonials ?? []),
     headings: () => api.get('/sectionHeading/getSectionHeading').then((r) => unwrap(r)?.headings ?? {}),
@@ -90,6 +92,11 @@ export const adminApi = {
     updateTestimonial: (id, formData) =>
         api.patch(`/testimonial/testimonialEdit/${id}`, formData).then(unwrap),
     deleteTestimonial: (id) => api.delete(`/testimonial/testimonialDelete/${id}`).then(unwrap),
+
+    createEducation: (payload) => api.post('/education/education', payload).then(unwrap),
+    updateEducation: (id, payload) =>
+        api.patch(`/education/educationEdit/${id}`, payload).then(unwrap),
+    deleteEducation: (id) => api.delete(`/education/educationDelete/${id}`).then(unwrap),
 
     createService: (payload) => api.post('/service/service', payload).then(unwrap),
     updateService: (id, payload) => api.patch(`/service/serviceEdit/${id}`, payload).then(unwrap),

@@ -35,11 +35,11 @@ export default function Testimonials({ testimonials = [], heading }) {
     };
 
     return (
-        <section id="testimonials" className="relative px-6 py-28 lg:py-36">
+        <section id="testimonials" className="relative overflow-hidden px-6 py-28 lg:py-36">
             <div
                 aria-hidden="true"
                 className="pointer-events-none absolute top-1/2 left-1/2 h-80 w-[40rem] -translate-x-1/2 -translate-y-1/2 rounded-full opacity-50 blur-[120px]"
-                style={{ background: 'radial-gradient(circle, rgba(139,92,246,0.14), transparent 70%)' }}
+                style={{ background: 'radial-gradient(circle, rgba(223,199,155,0.11), transparent 70%)' }}
             />
 
             <div className="relative mx-auto max-w-4xl">

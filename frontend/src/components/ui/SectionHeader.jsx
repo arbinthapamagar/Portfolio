@@ -28,7 +28,7 @@ export default function SectionHeader({ heading, fallback = {}, align = 'left', 
                         as="span"
                         text={titleHighlight}
                         delay={0.1}
-                        className="block bg-gradient-to-r from-glow-400 via-glow-300 to-cyan-glow bg-clip-text text-transparent"
+                        className="block bg-gradient-to-r from-glow-400 via-glow-300 to-berry-400 bg-clip-text text-transparent"
                     />
                 )}
             </h2>

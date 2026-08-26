@@ -48,7 +48,7 @@ export default function Navbar({ resumeUrl }) {
                 <motion.nav
                     animate={{
                         maxWidth: condensed ? 1180 : 1560,
-                        backgroundColor: condensed ? 'rgba(14,14,21,0.78)' : 'rgba(14,14,21,0)',
+                        backgroundColor: condensed ? 'rgba(23,19,52,0.82)' : 'rgba(23,19,52,0)',
                         borderColor: condensed ? 'rgba(255,255,255,0.09)' : 'rgba(255,255,255,0)',
                         paddingTop: condensed ? 18 : 28,
                         paddingBottom: condensed ? 18 : 28,
@@ -58,7 +58,7 @@ export default function Navbar({ resumeUrl }) {
                 >
                     <Link to="/" className="group flex items-center gap-3.5">
                         <motion.span
-                            className="grid h-14 w-14 place-items-center rounded-2xl bg-glow-500 font-display text-2xl font-bold text-white shadow-[0_0_32px_-8px_rgba(139,92,246,0.9)]"
+                            className="grid h-14 w-14 place-items-center rounded-2xl bg-glow-500 font-display text-2xl font-bold text-ink-950 shadow-[0_0_32px_-8px_rgba(223,199,155,0.6)]"
                             whileHover={{ rotate: 90, borderRadius: '50%' }}
                             whileTap={{ scale: 0.92 }}
                             transition={{ type: 'spring', stiffness: 300, damping: 18 }}
@@ -68,7 +68,7 @@ export default function Navbar({ resumeUrl }) {
                         <span className="font-display text-2xl font-bold tracking-tight sm:text-3xl lg:text-4xl">
                             Arbeen
                             {/* underline draws in from the left on hover */}
-                            <span className="block h-[3px] w-0 rounded-full bg-gradient-to-r from-glow-400 to-cyan-glow transition-all duration-400 group-hover:w-full" />
+                            <span className="block h-[3px] w-0 rounded-full bg-gradient-to-r from-glow-400 to-berry-400 transition-all duration-400 group-hover:w-full" />
                         </span>
                     </Link>
 
@@ -77,7 +77,7 @@ export default function Navbar({ resumeUrl }) {
                             <li key={link.to}>
                                 <Link
                                     to={link.to}
-                                    className="relative block rounded-full px-6 py-3 text-lg font-medium text-mist-300 transition-colors hover:text-white"
+                                    className="relative block rounded-full px-6 py-3 text-lg font-medium text-mist-300 transition-colors hover:text-mist-100"
                                 >
                                     {isActive(link.to) && (
                                         <motion.span
@@ -110,7 +110,7 @@ export default function Navbar({ resumeUrl }) {
                             aria-label="Toggle menu"
                             aria-expanded={open}
                             onClick={() => setOpen((v) => !v)}
-                            className="grid h-13 w-13 place-items-center rounded-full border border-white/10 p-3 text-mist-300 transition-colors hover:text-white md:hidden"
+                            className="grid h-13 w-13 place-items-center rounded-full border border-white/10 p-3 text-mist-300 transition-colors hover:text-mist-100 md:hidden"
                         >
                             {open ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
                         </button>

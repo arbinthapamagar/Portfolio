@@ -86,7 +86,7 @@ function ResumeUploader({ current, reload, push }) {
                     type="button"
                     onClick={upload}
                     disabled={!file || busy}
-                    className="inline-flex items-center gap-2 rounded-xl bg-glow-500 px-5 py-2.5 text-sm font-medium text-white transition-colors hover:bg-glow-400 disabled:opacity-50"
+                    className="inline-flex items-center gap-2 rounded-xl bg-glow-500 px-5 py-2.5 text-sm font-medium text-ink-950 transition-colors hover:bg-glow-400 disabled:opacity-50"
                 >
                     <Upload className="h-4 w-4" />
                     {busy ? 'Uploading…' : 'Upload'}

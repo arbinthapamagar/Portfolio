@@ -9,6 +9,7 @@ const EMPTY = {
     clients: [],
     projects: [],
     experience: [],
+    education: [],
     testimonials: [],
     headings: {},
 };
@@ -27,18 +28,24 @@ export function SiteDataProvider({ children }) {
     useEffect(() => {
         let alive = true;
 
-        const keys = Object.keys(EMPTY);
-        Promise.allSettled([
-            publicApi.hero(),
-            publicApi.about(),
-            publicApi.footer(),
-            publicApi.services(),
-            publicApi.clients(),
-            publicApi.projects(),
-            publicApi.experience(),
-            publicApi.testimonials(),
-            publicApi.headings(),
-        ]).then((results) => {
+        // keyed rather than positional: a plain array of promises has to stay in
+        // lockstep with Object.keys(EMPTY), and silently mis-assigns every
+        // section the moment someone inserts one in the wrong place
+        const sources = {
+            hero: publicApi.hero,
+            about: publicApi.about,
+            footer: publicApi.footer,
+            services: publicApi.services,
+            clients: publicApi.clients,
+            projects: publicApi.projects,
+            experience: publicApi.experience,
+            education: publicApi.education,
+            testimonials: publicApi.testimonials,
+            headings: publicApi.headings,
+        };
+
+        const keys = Object.keys(sources);
+        Promise.allSettled(keys.map((key) => sources[key]())).then((results) => {
             if (!alive) return;
             const next = { ...EMPTY };
             results.forEach((result, i) => {

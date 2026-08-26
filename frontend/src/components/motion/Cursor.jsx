@@ -44,7 +44,7 @@ export default function Cursor() {
                     width: hot ? 46 : 26,
                     height: hot ? 46 : 26,
                     opacity: hot ? 1 : 0.55,
-                    backgroundColor: hot ? 'rgba(167,139,250,0.12)' : 'rgba(167,139,250,0)',
+                    backgroundColor: hot ? 'rgba(223,199,155,0.12)' : 'rgba(223,199,155,0)',
                 }}
                 transition={{ type: 'spring', stiffness: 260, damping: 22 }}
             />

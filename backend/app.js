@@ -40,13 +40,29 @@ app.use(cookieParser());
 
 //routes import here **************************
 import { adminRouter } from './src/routes/admin.route.js';
-import {contactRouter} from './src/routes/contact.route.js'
-import {experienceRouter} from "./src/routes/experience.route.js"
+import { contactRouter } from './src/routes/contact.route.js';
+import { experienceRouter } from './src/routes/experience.route.js';
+import { projectRouter } from './src/routes/project.route.js';
+import { testimonialRouter } from './src/routes/testimonial.route.js';
+import { serviceRouter } from './src/routes/service.route.js';
+import { clientRouter } from './src/routes/client.route.js';
+import { heroRouter } from './src/routes/hero.route.js';
+import { aboutRouter } from './src/routes/about.route.js';
+import { footerRouter } from './src/routes/footer.route.js';
+import { sectionHeadingRouter } from './src/routes/sectionHeading.route.js';
 
 // route decleration
 
 app.use('/api/v1/admin', adminRouter);
-app.use('/api/v1/contact',contactRouter);
-app.use('/api/v1/experience',experienceRouter)
+app.use('/api/v1/contact', contactRouter);
+app.use('/api/v1/experience', experienceRouter);
+app.use('/api/v1/project', projectRouter);
+app.use('/api/v1/testimonial', testimonialRouter);
+app.use('/api/v1/service', serviceRouter);
+app.use('/api/v1/client', clientRouter);
+app.use('/api/v1/hero', heroRouter);
+app.use('/api/v1/about', aboutRouter);
+app.use('/api/v1/footer', footerRouter);
+app.use('/api/v1/sectionHeading', sectionHeadingRouter);
 
 export default app;

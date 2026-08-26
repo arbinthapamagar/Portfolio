@@ -18,6 +18,10 @@ const client = new mongoose.Schema(
             type: String,
             required: true,
         },
+        logoId: {
+            type: String,
+            default: '',
+        },
        
     },
     { timestamps: true }

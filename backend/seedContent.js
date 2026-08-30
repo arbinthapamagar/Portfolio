@@ -394,7 +394,7 @@ const EDUCATION = [
     },
     {
         title: 'MERN Stack Training',
-        institution: 'Professional training programme',
+        institution: 'Broadway Infosys',
         location: 'Kathmandu, Nepal',
         period: '2026',
         kind: 'training',
@@ -507,7 +507,7 @@ const seed = async () => {
     await mongoose.disconnect();
     console.log(
         `content seed done — ${PROJECTS.length} projects, ${SERVICES.length} skill groups, ` +
-            `${EXPERIENCE.length} roles, ${EDUCATION.length} education entries`
+        `${EXPERIENCE.length} roles, ${EDUCATION.length} education entries`
     );
 };
 

@@ -290,85 +290,101 @@ const SERVICES = [
 
 // work history at Matat. Highlights are the changes actually shipped (taken from
 // the commit history on each product), not the product's full feature list.
-const MATAT = { company: 'Matat', companyUrl: 'https://matat.co.il/', location: 'Kathmandu, Nepal' };
+const MATAT = {
+    company: 'Matat Technology',
+    companyUrl: 'https://matat.co.il/',
+    location: 'Kathmandu, Nepal',
+};
 
 const EXPERIENCE = [
+    /* One card per company. The five products used to be five separate cards,
+       which read as five employers; they are now the products this one role was
+       spent on, each keeping its own link. */
     {
         ...MATAT,
-        title: 'Software Developer — TextMe',
-        period: 'Aug 2026',
+        title: 'Software Developer',
+        period: 'Jul 2026 – Present',
         current: true,
-        liveUrl: 'https://textme.co.il',
         description:
-            'TextMe is an SMS marketing and notification app for Shopify and Wix stores — Laravel with Sanctum on the backend, Vue 3 and TypeScript on the front. I worked on the back-in-stock restock notification feature, taking it from store-wide to per-variant control.',
-        highlights: [
-            'Built per-product variant selection for restock notifications, so a merchant can arm alerts on a single size or colour instead of the whole product.',
-            'Added collapsible variant rows to ProductVariantSelect — a product with 40 variants stopped burying the rest of the page.',
-            'Added variant image handling to the picker and the restock block so the row a merchant picks looks like the product they know.',
-            'Fixed restock scope settings silently persisting "all variants" — the save looked successful while quietly discarding the narrower choice the merchant had made.',
-            'Fixed the settings form navigating away on save, so merchants stay on Restock Settings and can see the change landed.',
-            'Rewrote the restock-notification block help text after watching people misread when the back-in-stock form actually appears.',
+            'Matat builds and runs e-commerce software for Israeli merchants — Shopify and Wix apps, a multi-carrier shipping backend, and a loyalty platform. I work across that portfolio in Laravel and Vue on one side and Remix and React on the other, mostly on merchant-facing features and the settings and diagnostics that sit around them.',
+        products: [
+            {
+                name: 'TextMe',
+                url: 'https://textme.co.il',
+                summary:
+                    'SMS marketing and back-in-stock notifications for Shopify and Wix stores. Laravel with Sanctum behind, Vue 3 and TypeScript in front.',
+                highlights: [
+                    'Took back-in-stock notifications from store-wide to per-variant, so a merchant can arm alerts on a single size or colour instead of the whole product.',
+                    'Fixed restock scope settings silently persisting "all variants" — the save reported success while quietly discarding the narrower choice the merchant had just made.',
+                    'Added collapsible variant rows and variant images to the product picker, so a 40-variant product stopped burying the rest of the page.',
+                    'Rewrote the restock-notification block help text after watching people misread when the back-in-stock form actually appears.',
+                ],
+            },
+            {
+                name: 'ShipOS',
+                url: 'https://shipos.co.il',
+                summary:
+                    'Multi-carrier shipping backend that creates shipments for WooCommerce, Shopify and Wix stores and dispatches them to Israeli carriers.',
+                highlights: [
+                    'Surfaced the ShipOS server IPs in the ip_blocked warning — merchants whose host firewalled our callbacks previously saw a dead integration with nothing to whitelist.',
+                    'Put branch-pickup package requirements into settings, so carrier constraints show before a merchant enables the option rather than after a shipment is rejected.',
+                    'Worked inside deliberately cache-and-lock-protected shipment creation on all four entry points, where weakening the guard reintroduces a duplicate-shipment race with real carrier charges attached.',
+                ],
+            },
+            {
+                name: 'Kedem Spa',
+                url: 'https://kedemspahouse.com',
+                summary:
+                    'Embedded Shopify app (Remix, Polaris, App Bridge) that turns gift-voucher orders into PDF vouchers and delivers them — a Remix server that enqueues and a pg-boss worker that sends.',
+                highlights: [
+                    'Added S3 storage for generated voucher PDFs, so a voucher stays retrievable instead of existing only as an email attachment.',
+                    'Added SMS delivery alongside email, so a recipient with a phone number and no inbox still receives their voucher.',
+                    'Allowed staff to send an SMS manually regardless of opt-in — the automatic path respects consent, but support needed a deliberate override for customers who had asked directly.',
+                    'Made the voucher balance line dynamic, so the PDF shows the real remaining balance rather than the original face value.',
+                ],
+            },
+            {
+                name: 'BeautyJaffa',
+                url: 'https://beautyspa-jaffa.com',
+                summary:
+                    'The second storefront on the same voucher platform, where recipient details arrive as Hebrew-named line-item properties on the Shopify order.',
+                highlights: [
+                    'Reworked recipient extraction so the Hebrew line-item properties map correctly onto the voucher fields.',
+                    'Handled the self-purchase case: a customer buying for themselves leaves the recipient fields empty, which previously produced a voucher addressed to nobody.',
+                ],
+            },
+            {
+                name: 'MYLO Loyalty Club',
+                url: '',
+                summary:
+                    'Modular Laravel loyalty platform for retail businesses, with a JSON-schema-validated per-business settings layer and a Vue storefront widget.',
+                highlights: [
+                    'Fixed the loyalty banner rendering left-to-right on Hebrew storefronts — the "Log in now" link now inherits RTL direction, so the call to action reads correctly for the store\'s actual customers.',
+                ],
+            },
         ],
-        techStack: 'Laravel, PHP, Vue, TypeScript, Tailwind CSS, Shopify, MySQL',
+        /* The work lives on each product above, so the role keeps no flat list of
+           its own — one merged column of eight lines hid which product each
+           change belonged to. */
+        highlights: [],
+        techStack:
+            'Laravel, PHP, Vue, TypeScript, Remix, React, Node.js, Prisma, PostgreSQL, MySQL, Shopify, WooCommerce, Wix, AWS S3, Docker',
         order: 1,
     },
     {
         ...MATAT,
-        title: 'Backend Developer — ShipOS',
-        period: 'Jul – Aug 2026',
-        current: true,
-        liveUrl: 'https://shipos.co.il',
+        title: 'Software Developer Intern',
+        // period and specifics to be confirmed — drafted, not invented as fact
+        period: '',
         description:
-            'ShipOS is a multi-platform shipping backend — a Laravel app that creates shipments for WooCommerce, Shopify and Wix stores and dispatches them to Israeli carriers (HFD, Zigzag, Cargo, self-pickup), with a WooCommerce plugin and Shopify admin extensions on top. My work was on the merchant-facing settings and diagnostics.',
+            'The internship that led into the developer role: learning a production Laravel and Vue codebase from the inside, working to real tickets against real merchant data rather than to a tutorial.',
         highlights: [
-            'Added branch-pickup package requirements to settings, so merchants see the carrier\'s constraints before enabling the option rather than after a shipment is rejected.',
-            'Surfaced the ShipOS server IPs in the ip_blocked warning — merchants whose host firewalled our callbacks previously saw a dead integration with no way to know what to whitelist.',
-            'Worked inside a codebase where shipment creation is deliberately cache-and-lock protected on all four entry points, because weakening it reintroduces a duplicate-shipment race with real carrier charges attached.',
+            'Worked inside an existing production codebase — reading it, tracing a feature end to end, and changing it without breaking the parts already in merchants\' hands.',
+            'Picked up the team\'s working practice: branches and pull requests, code review, and shipping in small reviewable pieces.',
+            'Moved from supervised fixes to owning merchant-facing features, which is what turned the internship into the developer role above.',
         ],
-        techStack: 'Laravel, PHP, MySQL, WooCommerce, Shopify, Wix, REST APIs',
+        techStack: 'Laravel, PHP, Vue, JavaScript, MySQL, Git',
         order: 2,
-    },
-    {
-        ...MATAT,
-        title: 'Shopify App Developer — Kedem Spa',
-        period: 'Jul 2026',
-        liveUrl: 'https://kedemspahouse.com',
-        description:
-            'An embedded Shopify app (Remix, Polaris, App Bridge) that forwards gift-voucher orders to the EasyBizy gift-card API, renders a PDF voucher with Puppeteer and emails it to the recipient. It runs as two processes against one Postgres — a Remix server that enqueues, and a pg-boss worker that delivers.',
-        highlights: [
-            'Added S3 storage for generated voucher PDFs so a voucher stays retrievable after the delivery email, instead of existing only as an attachment.',
-            'Added SMS notification delivery alongside email, so a recipient with a phone number and no inbox still receives their voucher.',
-            'Allowed staff to send an SMS manually regardless of opt-in status — the automatic path correctly respects consent, but support needed a deliberate override for customers who had asked for it directly.',
-            'Made the voucher balance line dynamic and added a gift-card suffix alias, so the PDF shows the real remaining balance rather than the original face value.',
-        ],
-        techStack: 'Remix, React, Shopify Polaris, App Bridge, Node.js, Prisma, PostgreSQL, AWS S3',
-        order: 3,
-    },
-    {
-        ...MATAT,
-        title: 'Shopify App Developer — BeautyJaffa',
-        period: 'Jul 2026',
-        liveUrl: 'https://beautyspa-jaffa.com',
-        description:
-            'The second storefront running the same EasyBizy voucher platform. Recipient details arrive as Hebrew-named line-item properties on the Shopify order, which is where most of the edge cases live.',
-        highlights: [
-            'Reworked recipient extraction so the Hebrew line-item properties map correctly onto the voucher fields.',
-            'Handled the self-purchase case: a customer buying a voucher for themselves leaves the recipient fields empty, which previously produced a voucher addressed to nobody.',
-        ],
-        techStack: 'Remix, React, Shopify Polaris, App Bridge, Node.js, Prisma, PostgreSQL',
-        order: 4,
-    },
-    {
-        ...MATAT,
-        title: 'Developer — MYLO Loyalty Club',
-        period: 'Jul 2026',
-        description:
-            'A modular Laravel loyalty platform for retail businesses, with a JSON-schema-validated per-business settings layer and a Vue storefront widget.',
-        highlights: [
-            'Fixed the loyalty banner rendering left-to-right on Hebrew storefronts — the "Log in now" link now inherits RTL direction, so the call to action reads correctly for the store\'s actual customers.',
-        ],
-        techStack: 'Laravel, PHP, PostgreSQL, Vue, Docker',
-        order: 5,
     },
 
     /* Administration and documentation roles before the move into development.
@@ -389,7 +405,7 @@ const EXPERIENCE = [
             'Handled the agency\'s routine correspondence and kept the filing system fit for audit and repeat verification requests.',
         ],
         techStack: 'Documentation, Correspondence, Record Keeping, MS Excel, MS Word',
-        order: 6,
+        order: 3,
     },
     {
         title: 'Admin Officer — Quotations & Tenders',
@@ -406,25 +422,27 @@ const EXPERIENCE = [
             'Ran day-to-day office administration: correspondence, filing, and the paperwork that follows a contract once it is won.',
         ],
         techStack: 'Tender Preparation, Quotations, Invoicing, Record Keeping, MS Excel',
-        order: 7,
+        order: 4,
     },
     {
-        title: 'Outsourcing & Admin Assistant',
+        title: 'Admin Officer',
         company: 'Sherpa Adventure Gear',
         companyUrl: 'https://www.sherpaadventuregear.com/',
         location: 'Kathmandu, Nepal',
         period: '',
         description:
-            'An outdoor-apparel manufacturer whose production leans on outside vendors for printing, embroidery, washing and knitting. My job was the ledger between the factory and those vendors: what went out, what came back, and whether the two agreed.',
+            'An outdoor-apparel brand selling through dealers inside Nepal and overseas. I handled the purchase-order and dispatch side of that: raising the orders, getting them out through the couriers, and keeping dealers and the warehouse talking to each other.',
         highlights: [
-            'Raised job orders to outsourcing vendors and issued materials against them, so nothing left the floor without a record attached.',
-            'Reconciled issue and return quantities per job on receipt, catching shortages and excess at delivery instead of at month end.',
-            'Followed vendor delivery schedules and escalated slipping jobs while production could still be resequenced around them.',
-            'Checked vendor bills against received quantities and agreed rates before passing them for payment.',
-            'Kept the outsourcing records and status reports that production and accounts both worked from.',
+            'Prepared and processed purchase orders for overseas dealers and for dealers inside Nepal, checking styles, quantities and rates before an order went out rather than after it was queried.',
+            'Booked and tracked courier consignments, and prepared the dispatch paperwork each shipment had to travel with.',
+            'Coordinated between dealers, the warehouse and production on order status, so a dealer chasing a delivery got an answer instead of being passed around.',
+            'Kept purchase-order and dispatch records current — placed, in transit, delivered, pending — so the state of an order did not depend on who you asked.',
+            'Followed up on outstanding orders and courier delays while there was still time to re-book or resequence around them.',
+            'Worked with outsourcing vendors on job orders and reconciled issued against returned quantities on receipt.',
         ],
-        techStack: 'Vendor Coordination, Inventory Records, Reconciliation, Reporting, MS Excel',
-        order: 8,
+        techStack:
+            'Purchase Orders, Courier Coordination, Dealer Coordination, Record Keeping, MS Excel',
+        order: 5,
     },
 ];
 

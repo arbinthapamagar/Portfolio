@@ -17,11 +17,17 @@ const FALLBACK_TITLE = 'Software developer — backend-leaning, agentic AI and R
    derived from what the site actually contains. Admin-entered stats still win. */
 function derivedStats({ projects, experience, services }) {
     const techCount = new Set(services.flatMap((s) => s.items || [])).size;
+    // products now live on the role that shipped them, so this counts products
+    // rather than rows — the timeline also carries administration roles, which
+    // ship nothing and would have inflated the old figure
+    const productCount = experience.flatMap((role) => role.products || []).length;
     return [
         { value: String(projects.length), label: 'Projects built' },
-        { value: String(experience.length), label: 'Products shipped on' },
+        productCount
+            ? { value: String(productCount), label: 'Products shipped on' }
+            : { value: String(experience.length), label: 'Roles' },
         { value: String(techCount), label: 'Technologies' },
-    ].filter((s) => s.value !== '0');
+    ].filter((stat) => stat.value !== '0');
 }
 
 /* the stack strip shows in both states — with a portrait it sits under the

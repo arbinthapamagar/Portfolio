@@ -42,6 +42,19 @@ const experienceSchema = new mongoose.Schema(
             type: [String],
             default: [],
         },
+        /* One card per company, so the products worked on inside that company live
+           on the role rather than each taking a card of their own. */
+        products: [
+            {
+                name: { type: String, trim: true },
+                url: { type: String, default: '', trim: true },
+                summary: { type: String, default: '', trim: true },
+                // what was done on this product specifically, so a role with
+                // several products reads as several pieces of work rather than
+                // one merged list
+                highlights: { type: [String], default: [] },
+            },
+        ],
         // kept as a string for backwards compatibility — comma separated
         techStack: {
             type: String,

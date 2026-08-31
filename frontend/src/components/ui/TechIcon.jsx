@@ -1,6 +1,6 @@
 import { Boxes, Braces, ClipboardList, Cloud, Database, FileCode2, FileSignature, FileSpreadsheet,
     FileText, FolderOpen, KeyRound, Mails, Mic, Network, PackageCheck, ReceiptText, ScanEye, Shield,
-    Sparkles, Theater, Upload, Users } from 'lucide-react';
+    Sparkles, Theater, Truck, Upload, Users } from 'lucide-react';
 import { ALIASES, MARKS } from './techMarks';
 
 const normalise = (name) => String(name || '').toLowerCase().replace(/[^a-z0-9]/g, '');
@@ -68,6 +68,9 @@ const GLYPHS = {
     reconciliation: PackageCheck,
     inventoryrecords: PackageCheck,
     vendorcoordination: Users,
+    purchaseorders: ClipboardList,
+    couriercoordination: Truck,
+    dealercoordination: Users,
 };
 
 /**

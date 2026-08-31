@@ -2,7 +2,7 @@ import ResourceManager from '../../components/admin/ResourceManager';
 import { adminApi, publicApi } from '../../lib/api';
 
 const FIELDS = [
-    { name: 'title', label: 'Role / product', required: true, placeholder: 'Backend Developer — ShipOS' },
+    { name: 'title', label: 'Role', required: true, placeholder: 'Software Developer — Matat Technology' },
     { name: 'company', label: 'Company', placeholder: 'Matat' },
     { name: 'companyUrl', label: 'Company link', type: 'url', placeholder: 'https://matat.co.il/' },
     { name: 'period', label: 'Period', placeholder: 'Jul – Aug 2026' },
@@ -12,7 +12,7 @@ const FIELDS = [
     { name: 'order', label: 'Sort order', type: 'number' },
     {
         name: 'description',
-        label: 'What the product is',
+        label: 'What the role was',
         type: 'textarea',
         rows: 4,
         required: true,
@@ -20,11 +20,19 @@ const FIELDS = [
     },
     {
         name: 'highlights',
-        label: 'What you shipped',
+        label: 'Highlights',
         type: 'textarea',
         rows: 6,
         wide: true,
-        hint: 'One contribution per line — these become the numbered list on the detail page',
+        hint: 'One per line — these become the numbered list on the detail page',
+    },
+    {
+        name: 'products',
+        label: 'Products worked on',
+        type: 'textarea',
+        rows: 9,
+        wide: true,
+        hint: 'Name | https://link | short summary, then what you did on it as dashed lines underneath. Each product renders as its own block on the role.',
     },
     { name: 'techStack', label: 'Tech stack', wide: true, hint: 'Comma separated' },
     { name: 'imageUrl', label: 'Image', type: 'file', wide: true },

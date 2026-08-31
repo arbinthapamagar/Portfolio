@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { motion } from 'motion/react';
 import {
-    ArrowLeft, ArrowUpRight, Building2, CalendarDays, CheckCircle2, MapPin, Wrench,
+    ArrowLeft, ArrowUpRight, Boxes, Building2, CalendarDays, CheckCircle2, MapPin, Wrench,
 } from 'lucide-react';
 import { publicApi } from '../lib/api';
 import { useSiteData } from '../context/SiteDataContext';
@@ -73,6 +73,7 @@ export default function ExperienceDetail() {
 
     const stack = splitStack(entry.techStack);
     const highlights = entry.highlights || [];
+    const products = entry.products || [];
     const siblings = (data.experience || []).filter((e) => e._id !== entry._id);
 
     return (
@@ -173,6 +174,75 @@ export default function ExperienceDetail() {
                             Visit the product
                             <ArrowUpRight className="h-4 w-4" />
                         </GlowButton>
+                    </div>
+                )}
+
+                {/* ----------------------------- products ----------------------------- */}
+                {products.length > 0 && (
+                    <div className="mt-16">
+                        <h2 className="flex items-center gap-2.5 font-mono text-[11px] tracking-[0.2em] text-mist-600 uppercase">
+                            <Boxes className="h-4 w-4 text-glow-400/80" />
+                            Products and what I did on each
+                        </h2>
+
+                        <div className="mt-6 space-y-5">
+                            {products.map((product, p) => (
+                                <motion.section
+                                    key={product.name}
+                                    initial={{ opacity: 0, y: 18 }}
+                                    whileInView={{ opacity: 1, y: 0 }}
+                                    viewport={{ once: true, amount: 'some' }}
+                                    transition={{ duration: 0.6, ease: EASE, delay: p * 0.06 }}
+                                    className="glass glow-ring rounded-2xl p-6"
+                                >
+                                    <div className="flex flex-wrap items-start justify-between gap-3">
+                                        {product.url ? (
+                                            <a
+                                                href={product.url}
+                                                target="_blank"
+                                                rel="noreferrer"
+                                                className="group/p inline-flex items-center gap-2 font-display text-lg font-semibold text-mist-100 transition-colors hover:text-glow-300"
+                                            >
+                                                {product.name}
+                                                <ArrowUpRight className="h-4 w-4 text-glow-400/70 transition-transform duration-300 group-hover/p:-translate-y-0.5 group-hover/p:translate-x-0.5" />
+                                            </a>
+                                        ) : (
+                                            <span className="font-display text-lg font-semibold text-mist-100">
+                                                {product.name}
+                                            </span>
+                                        )}
+                                        {(product.highlights || []).length > 0 && (
+                                            <span className="font-mono text-[10px] tracking-widest text-mist-600 uppercase">
+                                                {product.highlights.length}{' '}
+                                                {product.highlights.length === 1 ? 'change' : 'changes'}
+                                            </span>
+                                        )}
+                                    </div>
+
+                                    {product.summary && (
+                                        <p className="mt-2.5 text-sm leading-relaxed text-mist-500">
+                                            {product.summary}
+                                        </p>
+                                    )}
+
+                                    {(product.highlights || []).length > 0 && (
+                                        <ul className="mt-5 space-y-3 border-t border-white/[0.06] pt-5">
+                                            {product.highlights.map((line, i) => (
+                                                <li
+                                                    key={i}
+                                                    className="flex gap-3.5 text-sm leading-relaxed text-mist-300/90"
+                                                >
+                                                    <span className="mt-px font-mono text-[10px] text-glow-400/70">
+                                                        {String(i + 1).padStart(2, '0')}
+                                                    </span>
+                                                    {line}
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    )}
+                                </motion.section>
+                            ))}
+                        </div>
                     </div>
                 )}
 

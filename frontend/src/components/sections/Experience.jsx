@@ -17,6 +17,9 @@ const splitStack = (value) =>
 function RoleCard({ item, index }) {
     const stack = splitStack(item.techStack);
     const highlights = item.highlights || [];
+    const products = item.products || [];
+    const detailCount =
+        highlights.length + products.reduce((sum, p) => sum + (p.highlights?.length || 0), 0);
 
     return (
         <motion.article
@@ -98,6 +101,69 @@ function RoleCard({ item, index }) {
                     {item.description}
                 </p>
 
+                {/* one block per product: with a whole company on a single card, a
+                    flat list of changes hid which product each one belonged to */}
+                {products.length > 0 && (
+                    <div className="mt-7 space-y-6">
+                        <p className="font-mono text-[10px] tracking-[0.18em] text-mist-600 uppercase">
+                            Products and what I did on each
+                        </p>
+
+                        {products.map((product, p) => (
+                            <motion.div
+                                key={product.name}
+                                initial={{ opacity: 0, x: -12 }}
+                                whileInView={{ opacity: 1, x: 0 }}
+                                viewport={{ once: true, amount: 'some' }}
+                                transition={{ duration: 0.55, ease: EASE, delay: 0.08 + p * 0.07 }}
+                                className="border-l border-white/[0.09] pl-5 transition-colors duration-500 hover:border-glow-400/40"
+                            >
+                                <div>
+                                    {product.url ? (
+                                        <a
+                                            href={product.url}
+                                            target="_blank"
+                                            rel="noreferrer"
+                                            className="group/p inline-flex items-center gap-1.5 font-display text-base font-semibold text-mist-100 transition-colors hover:text-glow-300"
+                                        >
+                                            {product.name}
+                                            <ArrowUpRight className="h-3.5 w-3.5 text-glow-400/60 transition-transform duration-300 group-hover/p:-translate-y-0.5 group-hover/p:translate-x-0.5" />
+                                        </a>
+                                    ) : (
+                                        <span className="font-display text-base font-semibold text-mist-100">
+                                            {product.name}
+                                        </span>
+                                    )}
+                                </div>
+
+                                {product.summary && (
+                                    <p className="mt-1.5 text-xs leading-relaxed text-mist-500">
+                                        {product.summary}
+                                    </p>
+                                )}
+
+                                {/* two per product here, the rest on the detail page */}
+                                {(product.highlights || []).length > 0 && (
+                                    <ul className="mt-3 space-y-2">
+                                        {product.highlights.slice(0, 2).map((line, i) => (
+                                            <li
+                                                key={i}
+                                                className="flex gap-3 text-sm leading-relaxed text-mist-300/85"
+                                            >
+                                                <span
+                                                    aria-hidden="true"
+                                                    className="mt-[7px] h-1.5 w-1.5 shrink-0 rounded-full bg-glow-400/70"
+                                                />
+                                                {line}
+                                            </li>
+                                        ))}
+                                    </ul>
+                                )}
+                            </motion.div>
+                        ))}
+                    </div>
+                )}
+
                 {/* the first two highlights act as a teaser for the detail page */}
                 {highlights.length > 0 && (
                     <ul className="mt-5 space-y-2.5">
@@ -140,9 +206,7 @@ function RoleCard({ item, index }) {
                             to={`/experience/${item._id}`}
                             className="group/cta inline-flex items-center gap-2 rounded-full bg-glow-500 px-5 py-2.5 text-sm font-semibold text-ink-950 transition-colors hover:bg-glow-400"
                         >
-                            {highlights.length > 2
-                                ? `See all ${highlights.length} highlights`
-                                : 'See the details'}
+                            {detailCount > 2 ? `See all ${detailCount} highlights` : 'See the details'}
                             <ArrowUpRight className="h-4 w-4 transition-transform duration-300 group-hover/cta:translate-x-0.5 group-hover/cta:-translate-y-0.5" />
                         </Link>
                     </Magnetic>

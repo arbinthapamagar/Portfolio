@@ -14,6 +14,43 @@ const parseHighlights = (value) => {
         .filter(Boolean);
 };
 
+/**
+ * Products are written as a product line followed by its own work, dash-marked:
+ *
+ *   TextMe | https://textme.co.il | SMS marketing for Shopify stores
+ *   - took restock notifications from store-wide to per-variant
+ *   - fixed scope settings silently persisting "all variants"
+ *   ShipOS | https://shipos.co.il | Multi-carrier shipping backend
+ *   - surfaced the server IPs in the ip_blocked warning
+ *
+ * A dashed line attaches to the product above it; anything else starts a new
+ * product. Only the name is required — a product with no link and no bullets is
+ * still a product.
+ */
+const parseProducts = (value) => {
+    if (Array.isArray(value)) return value;
+    if (typeof value !== 'string') return undefined;
+
+    const products = [];
+    for (const raw of value.split('\n')) {
+        const line = raw.trim();
+        if (!line) continue;
+
+        const bullet = line.match(/^[-*\u2022]\s*(.+)$/);
+        if (bullet && products.length) {
+            products[products.length - 1].highlights.push(bullet[1].trim());
+            continue;
+        }
+
+        const [name, url = '', summary = ''] = line
+            .replace(/^[-*\u2022]\s*/, '')
+            .split('|')
+            .map((part) => part.trim());
+        if (name) products.push({ name, url, summary, highlights: [] });
+    }
+    return products;
+};
+
 // multipart sends every field as a string, so 'false' would otherwise be truthy
 const parseBool = (value) => {
     if (typeof value === 'boolean') return value;
@@ -38,6 +75,8 @@ const experienceController = asyncHandler(async (req, res) => {
     }
     const highlights = parseHighlights(req.body.highlights);
     if (highlights) payload.highlights = highlights;
+    const products = parseProducts(req.body.products);
+    if (products) payload.products = products;
     const current = parseBool(req.body.current);
     if (current !== undefined) payload.current = current;
     if (req.body.order !== undefined && req.body.order !== '') {
@@ -130,6 +169,8 @@ const experienceEdit = asyncHandler(async (req, res) => {
     }
     const highlights = parseHighlights(req.body.highlights);
     if (highlights) experience.highlights = highlights;
+    const products = parseProducts(req.body.products);
+    if (products) experience.products = products;
     const current = parseBool(req.body.current);
     if (current !== undefined) experience.current = current;
     if (req.body.order !== undefined && req.body.order !== '') {

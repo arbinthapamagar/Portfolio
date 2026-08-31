@@ -1,5 +1,6 @@
+import { Suspense } from 'react';
 import { NavLink, Navigate, Outlet, useLocation } from 'react-router-dom';
-import { AnimatePresence, motion } from 'motion/react';
+import { motion } from 'motion/react';
 import {
     Briefcase, Building2, FileText, FolderKanban, GraduationCap, Home, LayoutDashboard,
     LogOut, Mail, MessageSquareQuote, PanelsTopLeft, Sparkles, Type,
@@ -112,18 +113,32 @@ export default function AdminLayout() {
                     ))}
                 </div>
 
-                <AnimatePresence mode="wait">
+                {/* Every admin screen is a lazy chunk, which is why this is a plain
+                    keyed mount rather than AnimatePresence with an exit: while the
+                    incoming chunk was loading, the wait-for-exit cycle left the
+                    entering <main> parked at its exit values (opacity 0, y -8), so
+                    the page arrived invisible and only a refresh fixed it.
+
+                    The Suspense boundary is local on purpose too — the one in App
+                    would swap the whole shell, sidebar included, for a loader on
+                    every navigation. */}
+                <Suspense
+                    fallback={
+                        <div className="grid min-h-[60vh] place-items-center">
+                            <Loader />
+                        </div>
+                    }
+                >
                     <motion.main
                         key={location.pathname}
                         initial={{ opacity: 0, y: 14 }}
                         animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -8 }}
                         transition={{ duration: 0.32, ease: EASE }}
                         className="mx-auto max-w-4xl p-6 lg:p-10"
                     >
                         <Outlet />
                     </motion.main>
-                </AnimatePresence>
+                </Suspense>
             </div>
         </div>
     );

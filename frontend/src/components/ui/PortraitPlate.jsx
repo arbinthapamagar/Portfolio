@@ -48,7 +48,7 @@ export default function PortraitPlate({
                 {/* palette cast — cool blueberry wash that clears on hover */}
                 <span
                     aria-hidden="true"
-                    className="pointer-events-none absolute inset-0 bg-berry-600/30 mix-blend-soft-light transition-opacity duration-700 group-hover:opacity-0"
+                    className="pointer-events-none absolute inset-0 bg-berry-600/22 mix-blend-soft-light transition-opacity duration-700 group-hover:opacity-0"
                 />
                 {/* keeps the crop from floating, and carries the caption */}
                 <span

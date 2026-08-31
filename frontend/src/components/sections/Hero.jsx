@@ -12,7 +12,6 @@ const FALLBACK = {
     subtitle: 'Software developer building agentic AI, RAG systems and web platforms.',
     buttonText: 'View my work',
     buttonLink: '#projects',
-    photo: 'data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20width%3D%27800%27%20height%3D%271000%27%3E%0A%3Cdefs%3E%3ClinearGradient%20id%3D%27g%27%20x1%3D%270%27%20y1%3D%270%27%20x2%3D%271%27%20y2%3D%271%27%3E%0A%3Cstop%20offset%3D%270%27%20stop-color%3D%27%235b4a7a%27/%3E%3Cstop%20offset%3D%271%27%20stop-color%3D%27%23c9a97e%27/%3E%3C/linearGradient%3E%3C/defs%3E%0A%3Crect%20width%3D%27800%27%20height%3D%271000%27%20fill%3D%27url%28%23g%29%27/%3E%0A%3Ccircle%20cx%3D%27400%27%20cy%3D%27390%27%20r%3D%27150%27%20fill%3D%27%232a2246%27%20opacity%3D%27.85%27/%3E%0A%3Cpath%20d%3D%27M150%201000c0-160%20112-270%20250-270s250%20110%20250%20270z%27%20fill%3D%27%232a2246%27%20opacity%3D%27.85%27/%3E%0A%3Ctext%20x%3D%27400%27%20y%3D%27960%27%20font-family%3D%27monospace%27%20font-size%3D%2730%27%20fill%3D%27%23fdf8ec%27%20text-anchor%3D%27middle%27%20opacity%3D%27.8%27%3EPREVIEW%20ONLY%3C/text%3E%3C/svg%3E',
 };
 
 const TICKER = [
@@ -81,20 +80,11 @@ export default function Hero({ hero, tickerItems = [] }) {
                                 }
                             >
                                 {i === words.length - 1 ? (
-                                    /* the halo is a second copy of the word, blurred
-                                       underneath: a shadow or filter on the clipped
-                                       gradient itself makes Chrome paint the whole
-                                       box instead of the glyphs */
-                                    <span className="relative inline-block">
-                                        <span
-                                            aria-hidden="true"
-                                            className="pointer-events-none absolute inset-0 select-none text-glow-400/40 blur-[14px]"
-                                        >
-                                            {word}
-                                        </span>
-                                        <span className="relative bg-gradient-to-br from-glow-300 via-glow-400 to-berry-400 bg-clip-text text-transparent">
-                                            {word}
-                                        </span>
+                                    /* no glow on this word: a shadow, a filter or a
+                                       blurred copy behind it all make the clipped
+                                       gradient paint as a slab rather than glyphs */
+                                    <span className="bg-gradient-to-br from-glow-300 via-glow-400 to-berry-400 bg-clip-text text-transparent">
+                                        {word}
                                     </span>
                                 ) : (
                                     word

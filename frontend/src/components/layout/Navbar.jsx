@@ -57,13 +57,22 @@ export default function Navbar({ resumeUrl }) {
                     className="mx-auto flex items-center justify-between rounded-[2rem] border px-6 backdrop-blur-xl sm:px-9"
                 >
                     <Link to="/" className="group flex items-center gap-3.5">
+                        {/* dark monogram: ink tile lit from the top-left, hairline
+                            gradient ring on hover, cream letter — the cream slab it
+                            replaced sat on the nav like a sticker */}
                         <motion.span
-                            className="grid h-14 w-14 place-items-center rounded-2xl bg-glow-500 font-display text-2xl font-bold text-ink-950 shadow-[0_0_32px_-8px_rgba(223,199,155,0.6)]"
+                            className="glow-ring relative grid h-14 w-14 place-items-center rounded-2xl border border-white/[0.14] bg-ink-950/85 shadow-[inset_0_1px_0_rgba(255,255,255,0.12),0_0_34px_-10px_rgba(139,124,232,0.65)] backdrop-blur"
                             whileHover={{ rotate: 90, borderRadius: '50%' }}
                             whileTap={{ scale: 0.92 }}
                             transition={{ type: 'spring', stiffness: 300, damping: 18 }}
                         >
-                            A
+                            <span
+                                aria-hidden="true"
+                                className="pointer-events-none absolute inset-0 rounded-[inherit] bg-gradient-to-br from-berry-500/45 via-transparent to-glow-500/15"
+                            />
+                            <span className="relative font-display text-[1.7rem] leading-none font-bold text-glow-300">
+                                A
+                            </span>
                         </motion.span>
                         <span className="font-display text-2xl font-bold tracking-tight sm:text-3xl lg:text-4xl">
                             Arbeen

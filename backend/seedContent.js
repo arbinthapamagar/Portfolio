@@ -396,7 +396,7 @@ const EDUCATION = [
         title: 'MERN Stack Training',
         institution: 'Broadway Infosys',
         location: 'Kathmandu, Nepal',
-        period: '2026',
+        period: '2024',
         kind: 'training',
         status: 'Completed',
         description:

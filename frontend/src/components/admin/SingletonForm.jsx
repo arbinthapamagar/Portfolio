@@ -117,6 +117,7 @@ export default function SingletonForm({
                             value={form[field.name]}
                             onChange={change}
                             onFile={pickFile}
+                            preview={field.type === 'file' ? current?.[field.name] : undefined}
                         />
                     ))}
                 </div>

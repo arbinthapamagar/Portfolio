@@ -2,7 +2,7 @@ import { Hero } from '../models/hero.model.js';
 import { asyncHandler } from '../utils/asyncHandler.js';
 import { apiError } from '../utils/apiError.js';
 import { apiResponse } from '../utils/apiResponse.js';
-import { uploadOnCloudinary } from '../utils/cloudinary.js';
+import { uploadOnCloudinary, deleteFromCloudinary } from '../utils/cloudinary.js';
 
 // the site only ever shows one hero, so this is an upsert on a single document
 const upsertHero = asyncHandler(async (req, res) => {
@@ -29,6 +29,18 @@ const upsertHero = asyncHandler(async (req, res) => {
 
     if (isActive !== undefined) {
         hero.isActive = isActive === 'true' || isActive === true;
+    }
+
+    // replacing the portrait removes the old asset rather than orphaning it
+    const photoFile = req.files?.photo?.[0];
+    if (photoFile) {
+        if (hero.photoId) await deleteFromCloudinary(hero.photoId);
+        const uploaded = await uploadOnCloudinary(photoFile.path);
+        if (!uploaded) {
+            throw new apiError(400, ' failed to upload photo ');
+        }
+        hero.photo = uploaded.secure_url;
+        hero.photoId = uploaded.public_id;
     }
 
     // badge images are optional, sent as two named single files

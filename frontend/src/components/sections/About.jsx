@@ -7,6 +7,7 @@ import Marquee from '../motion/Marquee';
 import SectionHeader from '../ui/SectionHeader';
 import GlowButton from '../ui/GlowButton';
 import TechIcon from '../ui/TechIcon';
+import PortraitPlate from '../ui/PortraitPlate';
 import { stagger, fadeUp, EASE } from '../motion/variants';
 
 const FALLBACK_TITLE = 'Software developer — backend-leaning, agentic AI and RAG';
@@ -20,6 +21,41 @@ function derivedStats({ projects, experience, services }) {
         { value: String(experience.length), label: 'Products shipped on' },
         { value: String(techCount), label: 'Technologies' },
     ].filter((s) => s.value !== '0');
+}
+
+/* the stack strip shows in both states — with a portrait it sits under the
+   plate, without one it closes out the at-a-glance card */
+function WorkingWith({ items, className = '' }) {
+    return (
+        <div className={className}>
+            <p className="flex items-center gap-2 font-mono text-[10px] tracking-widest text-mist-600 uppercase">
+                <Sparkles className="h-3 w-3 text-glow-400/70" />
+                Working with
+            </p>
+            <motion.ul
+                className="mt-4 flex flex-wrap gap-2"
+                initial="hidden"
+                whileInView="show"
+                viewport={{ once: true, amount: 'some' }}
+                variants={{ hidden: {}, show: { transition: { staggerChildren: 0.04 } } }}
+            >
+                {items.map((tech) => (
+                    <motion.li
+                        key={tech}
+                        variants={{
+                            hidden: { opacity: 0, scale: 0.8 },
+                            show: { opacity: 1, scale: 1 },
+                        }}
+                        whileHover={{ y: -3 }}
+                        title={tech}
+                        className="grid h-9 w-9 place-items-center rounded-lg border border-white/[0.07] bg-white/[0.03]"
+                    >
+                        <TechIcon name={tech} className="h-4 w-4" />
+                    </motion.li>
+                ))}
+            </motion.ul>
+        </div>
+    );
 }
 
 export default function About({
@@ -127,23 +163,24 @@ export default function About({
                     </div>
 
                     <Parallax speed={38} className="lg:sticky lg:top-32">
-                        <div className="group relative">
+                        <div className="relative">
                             <div className="absolute -inset-3 rounded-[2rem] bg-gradient-to-br from-glow-500/20 via-transparent to-berry-400/20 blur-2xl" />
 
                             {about?.photo ? (
-                                <motion.div
-                                    whileHover={{ scale: 1.015 }}
-                                    transition={{ type: 'spring', stiffness: 220, damping: 22 }}
-                                    className="glass relative aspect-[4/5] overflow-hidden rounded-[1.75rem]"
-                                >
-                                    <img
+                                <div className="flex flex-col gap-6">
+                                    <PortraitPlate
                                         src={about.photo}
-                                        alt={about?.title || 'Portrait'}
-                                        loading="lazy"
-                                        className="h-full w-full object-cover"
+                                        alt="Portrait"
+                                        caption={currentRole?.title || titleHead}
+                                        sub={footer?.location}
                                     />
-                                    <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-ink-950/70 via-transparent to-transparent" />
-                                </motion.div>
+                                    {topStack.length > 0 && (
+                                        <WorkingWith
+                                            items={topStack}
+                                            className="glass glow-ring rounded-2xl px-6 py-5"
+                                        />
+                                    )}
+                                </div>
                             ) : (
                                 /* no portrait uploaded — a real snapshot beats an empty
                                    monogram card holding open a column of dead space */
@@ -231,37 +268,10 @@ export default function About({
                                     </dl>
 
                                     {topStack.length > 0 && (
-                                        <div className="mt-7 border-t border-white/[0.06] pt-6">
-                                            <p className="flex items-center gap-2 font-mono text-[10px] tracking-widest text-mist-600 uppercase">
-                                                <Sparkles className="h-3 w-3 text-glow-400/70" />
-                                                Working with
-                                            </p>
-                                            <motion.ul
-                                                className="mt-4 flex flex-wrap gap-2"
-                                                initial="hidden"
-                                                whileInView="show"
-                                                viewport={{ once: true, amount: 'some' }}
-                                                variants={{
-                                                    hidden: {},
-                                                    show: { transition: { staggerChildren: 0.04 } },
-                                                }}
-                                            >
-                                                {topStack.map((tech) => (
-                                                    <motion.li
-                                                        key={tech}
-                                                        variants={{
-                                                            hidden: { opacity: 0, scale: 0.8 },
-                                                            show: { opacity: 1, scale: 1 },
-                                                        }}
-                                                        whileHover={{ y: -3 }}
-                                                        title={tech}
-                                                        className="grid h-9 w-9 place-items-center rounded-lg border border-white/[0.07] bg-white/[0.03]"
-                                                    >
-                                                        <TechIcon name={tech} className="h-4 w-4" />
-                                                    </motion.li>
-                                                ))}
-                                            </motion.ul>
-                                        </div>
+                                        <WorkingWith
+                                            items={topStack}
+                                            className="mt-7 border-t border-white/[0.06] pt-6"
+                                        />
                                     )}
                                 </motion.div>
                             )}

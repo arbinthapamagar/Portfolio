@@ -90,10 +90,6 @@
         backdrop-filter: blur(14px);
     }
 
-    .glow-text {
-        text-shadow: 0 0 28px color-mix(in oklab, var(--color-glow-400) 55%, transparent);
-    }
-
     /* animated gradient border used on feature cards */
     .glow-ring {
         position: relative;

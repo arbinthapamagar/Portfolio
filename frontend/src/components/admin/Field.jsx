@@ -2,8 +2,9 @@ const BASE =
     'w-full rounded-xl border border-white/10 bg-white/[0.03] px-4 py-2.5 text-sm text-mist-100 outline-none transition-colors placeholder:text-mist-600 focus:border-glow-400/60 focus:bg-white/[0.05]';
 
 // one input renderer for every admin form
-export default function Field({ field, value, onChange, onFile }) {
+export default function Field({ field, value, onChange, onFile, preview }) {
     const { name, label, type = 'text', placeholder, required, hint, options, multiple } = field;
+    const showPreview = type === 'file' && typeof preview === 'string' && preview.startsWith('http');
 
     return (
         <label className={`block ${field.wide ? 'sm:col-span-2' : ''}`}>
@@ -22,6 +23,24 @@ export default function Field({ field, value, onChange, onFile }) {
                     placeholder={placeholder}
                     className={`${BASE} resize-none`}
                 />
+            )}
+
+            {showPreview && (
+                <span className="mb-2 flex items-center gap-3">
+                    <img
+                        src={preview}
+                        alt=""
+                        className="h-16 w-16 rounded-xl border border-white/10 object-cover"
+                    />
+                    <a
+                        href={preview}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="text-[11px] text-mist-500 underline decoration-white/20 underline-offset-2 hover:text-glow-300"
+                    >
+                        Currently live — pick a file to replace it
+                    </a>
+                </span>
             )}
 
             {type === 'file' && (

@@ -7,6 +7,13 @@ const FIELDS = [
     { name: 'subtitle', label: 'Subtitle', type: 'textarea', rows: 3, required: true, wide: true },
     { name: 'buttonLink', label: 'Button link', required: true, placeholder: '#projects' },
     { name: 'isActive', label: 'Active', type: 'checkbox', checkboxLabel: 'Hero is live' },
+    {
+        name: 'photo',
+        label: 'Portrait photo',
+        type: 'file',
+        wide: true,
+        hint: 'Shown beside your name. Without one the hero stays centred and text-only. Portrait crops (4:5) fit best.',
+    },
     { name: 'badgeImage1', label: 'Badge image 1', type: 'file' },
     { name: 'badgeImage2', label: 'Badge image 2', type: 'file' },
 ];

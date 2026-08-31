@@ -181,7 +181,7 @@ export default function ExperienceDetail() {
                     <div className="mt-16">
                         <h2 className="flex items-center gap-2.5 font-mono text-[11px] tracking-[0.2em] text-mist-600 uppercase">
                             <CheckCircle2 className="h-4 w-4 text-glow-400/80" />
-                            What I shipped
+                            What I did
                         </h2>
 
                         <motion.ul
@@ -220,7 +220,7 @@ export default function ExperienceDetail() {
                     <div className="mt-16">
                         <h2 className="flex items-center gap-2.5 font-mono text-[11px] tracking-[0.2em] text-mist-600 uppercase">
                             <Wrench className="h-4 w-4 text-glow-400/80" />
-                            Stack
+                            Tools & stack
                         </h2>
 
                         <motion.ul

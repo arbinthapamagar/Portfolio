@@ -141,7 +141,7 @@ function RoleCard({ item, index }) {
                             className="group/cta inline-flex items-center gap-2 rounded-full bg-glow-500 px-5 py-2.5 text-sm font-semibold text-ink-950 transition-colors hover:bg-glow-400"
                         >
                             {highlights.length > 2
-                                ? `See all ${highlights.length} contributions`
+                                ? `See all ${highlights.length} highlights`
                                 : 'See the details'}
                             <ArrowUpRight className="h-4 w-4 transition-transform duration-300 group-hover/cta:translate-x-0.5 group-hover/cta:-translate-y-0.5" />
                         </Link>

@@ -8,6 +8,7 @@ import SectionHeader from '../ui/SectionHeader';
 import GlowButton from '../ui/GlowButton';
 import TechIcon from '../ui/TechIcon';
 import PortraitPlate from '../ui/PortraitPlate';
+import githubPortrait from '../../assets/github-portrait.jpg';
 import { stagger, fadeUp, EASE } from '../motion/variants';
 
 const FALLBACK_TITLE = 'Software developer — backend-leaning, agentic AI and RAG';
@@ -58,6 +59,96 @@ function WorkingWith({ items, className = '' }) {
     );
 }
 
+/* the facts that used to stand in for a missing portrait now sit under every
+   portrait instead — a photo and "currently / education / based in" answer
+   different questions, and losing the second one to upload the first was a
+   trade nobody asked for */
+function AtAGlance({ currentRole, degree, location, topStack }) {
+    return (
+        <motion.div
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 'some' }}
+            transition={{ duration: 0.7, ease: EASE }}
+            className="glass glow-ring relative overflow-hidden rounded-[1.75rem] p-7"
+        >
+            <p className="font-mono text-[10px] tracking-[0.2em] text-mist-600 uppercase">
+                At a glance
+            </p>
+
+            <dl className="mt-6 flex flex-col gap-5">
+                {currentRole && (
+                    <div className="flex gap-3.5">
+                        <span className="mt-0.5 grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-glow-500/15 text-glow-300">
+                            <Briefcase className="h-4 w-4" />
+                        </span>
+                        <div className="min-w-0">
+                            <dt className="font-mono text-[10px] tracking-widest text-mist-600 uppercase">
+                                Currently
+                            </dt>
+                            <dd className="mt-1 text-sm leading-snug text-mist-200">
+                                {currentRole.title}
+                                {currentRole.company && (
+                                    <>
+                                        {' at '}
+                                        {currentRole.companyUrl ? (
+                                            <a
+                                                href={currentRole.companyUrl}
+                                                target="_blank"
+                                                rel="noreferrer"
+                                                className="text-glow-300 underline decoration-glow-500/40 underline-offset-2"
+                                            >
+                                                {currentRole.company}
+                                            </a>
+                                        ) : (
+                                            currentRole.company
+                                        )}
+                                    </>
+                                )}
+                            </dd>
+                        </div>
+                    </div>
+                )}
+
+                {degree && (
+                    <div className="flex gap-3.5">
+                        <span className="mt-0.5 grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-berry-400/15 text-berry-300">
+                            <GraduationCap className="h-4 w-4" />
+                        </span>
+                        <div className="min-w-0">
+                            <dt className="font-mono text-[10px] tracking-widest text-mist-600 uppercase">
+                                Education
+                            </dt>
+                            <dd className="mt-1 text-sm leading-snug text-mist-200">{degree.title}</dd>
+                            {degree.institution && (
+                                <dd className="mt-0.5 text-xs text-mist-500">{degree.institution}</dd>
+                            )}
+                        </div>
+                    </div>
+                )}
+
+                {location && (
+                    <div className="flex gap-3.5">
+                        <span className="mt-0.5 grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-glow-500/15 text-glow-300">
+                            <MapPin className="h-4 w-4" />
+                        </span>
+                        <div>
+                            <dt className="font-mono text-[10px] tracking-widest text-mist-600 uppercase">
+                                Based in
+                            </dt>
+                            <dd className="mt-1 text-sm text-mist-200">{location}</dd>
+                        </div>
+                    </div>
+                )}
+            </dl>
+
+            {topStack.length > 0 && (
+                <WorkingWith items={topStack} className="mt-7 border-t border-white/[0.06] pt-6" />
+            )}
+        </motion.div>
+    );
+}
+
 export default function About({
     about,
     heading,
@@ -73,6 +164,9 @@ export default function About({
     const currentRole = experience.find((e) => e.current) || experience[0] || null;
     const degree = education.find((e) => e.kind === 'degree') || education[0] || null;
     const topStack = [...new Set(services.flatMap((s) => s.items || []))].slice(0, 10);
+    // an uploaded portrait wins; the bundled one keeps the column from ever
+    // standing empty
+    const portrait = about?.photo || githubPortrait;
 
     // 'Software developer — backend-leaning, agentic AI and RAG' renders as two
     // lines, the specialism in the accent gradient
@@ -166,115 +260,15 @@ export default function About({
                         <div className="relative">
                             <div className="absolute -inset-3 rounded-[2rem] bg-gradient-to-br from-glow-500/20 via-transparent to-berry-400/20 blur-2xl" />
 
-                            {about?.photo ? (
-                                <div className="flex flex-col gap-6">
-                                    <PortraitPlate
-                                        src={about.photo}
-                                        alt="Portrait"
-                                        caption={currentRole?.title || titleHead}
-                                        sub={footer?.location}
-                                    />
-                                    {topStack.length > 0 && (
-                                        <WorkingWith
-                                            items={topStack}
-                                            className="glass glow-ring rounded-2xl px-6 py-5"
-                                        />
-                                    )}
-                                </div>
-                            ) : (
-                                /* no portrait uploaded — a real snapshot beats an empty
-                                   monogram card holding open a column of dead space */
-                                <motion.div
-                                    initial={{ opacity: 0, y: 24 }}
-                                    whileInView={{ opacity: 1, y: 0 }}
-                                    viewport={{ once: true, amount: 'some' }}
-                                    transition={{ duration: 0.7, ease: EASE }}
-                                    className="glass glow-ring relative overflow-hidden rounded-[1.75rem] p-7"
-                                >
-                                    <p className="font-mono text-[10px] tracking-[0.2em] text-mist-600 uppercase">
-                                        At a glance
-                                    </p>
-
-                                    <dl className="mt-6 flex flex-col gap-5">
-                                        {currentRole && (
-                                            <div className="flex gap-3.5">
-                                                <span className="mt-0.5 grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-glow-500/15 text-glow-300">
-                                                    <Briefcase className="h-4 w-4" />
-                                                </span>
-                                                <div className="min-w-0">
-                                                    <dt className="font-mono text-[10px] tracking-widest text-mist-600 uppercase">
-                                                        Currently
-                                                    </dt>
-                                                    <dd className="mt-1 text-sm leading-snug text-mist-200">
-                                                        {currentRole.title}
-                                                        {currentRole.company && (
-                                                            <>
-                                                                {' at '}
-                                                                {currentRole.companyUrl ? (
-                                                                    <a
-                                                                        href={currentRole.companyUrl}
-                                                                        target="_blank"
-                                                                        rel="noreferrer"
-                                                                        className="text-glow-300 underline decoration-glow-500/40 underline-offset-2"
-                                                                    >
-                                                                        {currentRole.company}
-                                                                    </a>
-                                                                ) : (
-                                                                    currentRole.company
-                                                                )}
-                                                            </>
-                                                        )}
-                                                    </dd>
-                                                </div>
-                                            </div>
-                                        )}
-
-                                        {degree && (
-                                            <div className="flex gap-3.5">
-                                                <span className="mt-0.5 grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-berry-400/15 text-berry-300">
-                                                    <GraduationCap className="h-4 w-4" />
-                                                </span>
-                                                <div className="min-w-0">
-                                                    <dt className="font-mono text-[10px] tracking-widest text-mist-600 uppercase">
-                                                        Education
-                                                    </dt>
-                                                    <dd className="mt-1 text-sm leading-snug text-mist-200">
-                                                        {degree.title}
-                                                    </dd>
-                                                    {degree.institution && (
-                                                        <dd className="mt-0.5 text-xs text-mist-500">
-                                                            {degree.institution}
-                                                        </dd>
-                                                    )}
-                                                </div>
-                                            </div>
-                                        )}
-
-                                        {footer?.location && (
-                                            <div className="flex gap-3.5">
-                                                <span className="mt-0.5 grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-glow-500/15 text-glow-300">
-                                                    <MapPin className="h-4 w-4" />
-                                                </span>
-                                                <div>
-                                                    <dt className="font-mono text-[10px] tracking-widest text-mist-600 uppercase">
-                                                        Based in
-                                                    </dt>
-                                                    <dd className="mt-1 text-sm text-mist-200">
-                                                        {footer.location}
-                                                    </dd>
-                                                </div>
-                                            </div>
-                                        )}
-                                    </dl>
-
-                                    {topStack.length > 0 && (
-                                        <WorkingWith
-                                            items={topStack}
-                                            className="mt-7 border-t border-white/[0.06] pt-6"
-                                        />
-                                    )}
-                                </motion.div>
-                            )}
+                            <div className="flex flex-col gap-6">
+                                <PortraitPlate src={portrait} alt="Portrait" />
+                                <AtAGlance
+                                    currentRole={currentRole}
+                                    degree={degree}
+                                    location={footer?.location}
+                                    topStack={topStack}
+                                />
+                            </div>
                         </div>
                     </Parallax>
                 </div>

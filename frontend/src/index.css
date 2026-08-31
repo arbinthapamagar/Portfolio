@@ -147,6 +147,53 @@
     animation-play-state: paused;
 }
 
+/* Sweeping conic ring used on the github profile card. The angle is animated as
+   a registered custom property rather than by rotating the pseudo-element — a
+   transform would spin the masked box itself and drag the corners around with
+   it. The global reduced-motion rule freezes this like every other animation. */
+@property --ring-angle {
+    syntax: '<angle>';
+    inherits: false;
+    initial-value: 0deg;
+}
+
+.spin-ring {
+    position: relative;
+}
+.spin-ring::before {
+    content: '';
+    position: absolute;
+    inset: -1px;
+    border-radius: inherit;
+    padding: 1px;
+    background: conic-gradient(
+        from var(--ring-angle),
+        transparent 0deg,
+        color-mix(in oklab, var(--color-glow-400) 85%, transparent) 55deg,
+        transparent 130deg,
+        transparent 210deg,
+        color-mix(in oklab, var(--color-berry-400) 85%, transparent) 285deg,
+        transparent 350deg
+    );
+    -webkit-mask:
+        linear-gradient(#000 0 0) content-box,
+        linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    animation: ring-sweep 9s linear infinite;
+    opacity: 0.5;
+    pointer-events: none;
+}
+.spin-ring:hover::before {
+    opacity: 0.9;
+}
+
+@keyframes ring-sweep {
+    to {
+        --ring-angle: 360deg;
+    }
+}
+
 @keyframes float-y {
     0%,
     100% {

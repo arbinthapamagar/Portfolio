@@ -1,4 +1,6 @@
-import { Boxes, Braces, Cloud, Database, FileCode2, KeyRound, Mic, Network, ScanEye, Shield, Sparkles, Theater, Upload } from 'lucide-react';
+import { Boxes, Braces, ClipboardList, Cloud, Database, FileCode2, FileSignature, FileSpreadsheet,
+    FileText, FolderOpen, KeyRound, Mails, Mic, Network, PackageCheck, ReceiptText, ScanEye, Shield,
+    Sparkles, Theater, Upload, Users } from 'lucide-react';
 import { ALIASES, MARKS } from './techMarks';
 
 const normalise = (name) => String(name || '').toLowerCase().replace(/[^a-z0-9]/g, '');
@@ -48,6 +50,24 @@ const GLYPHS = {
     ses: Cloud,
     sanctum: Shield,
     pgboss: Boxes,
+    // the admin roles list office work rather than libraries, and a row of
+    // identical fallback sparkles told the reader nothing
+    msexcel: FileSpreadsheet,
+    excel: FileSpreadsheet,
+    msword: FileText,
+    word: FileText,
+    documentation: FileText,
+    correspondence: Mails,
+    recordkeeping: FolderOpen,
+    filing: FolderOpen,
+    tenderpreparation: ClipboardList,
+    tenders: ClipboardList,
+    quotations: FileSignature,
+    invoicing: ReceiptText,
+    reporting: FileSpreadsheet,
+    reconciliation: PackageCheck,
+    inventoryrecords: PackageCheck,
+    vendorcoordination: Users,
 };
 
 /**

@@ -6,6 +6,7 @@ import Hero from '../components/sections/Hero';
 import About from '../components/sections/About';
 import Skills from '../components/sections/Skills';
 import Projects from '../components/sections/Projects';
+import GithubProfile from '../components/sections/GithubProfile';
 import Experience from '../components/sections/Experience';
 import Education from '../components/sections/Education';
 import Testimonials from '../components/sections/Testimonials';
@@ -66,6 +67,9 @@ export default function Home() {
 
             <Projects projects={data.projects} heading={data.headings.projects} limit={6} />
             <SeeAll to="/projects" label="Browse all projects" />
+
+            {/* the curated projects above are the pitch; this is the live feed */}
+            <GithubProfile githubUrl={data.footer?.githubUrl} heading={data.headings.github} />
 
             <Experience experience={data.experience} heading={data.headings.experience} />
             <Education education={data.education} heading={data.headings.education} />

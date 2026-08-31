@@ -11,6 +11,7 @@ const SECTIONS = [
     { key: 'about', label: 'About' },
     { key: 'skills', label: 'Skills' },
     { key: 'projects', label: 'Projects' },
+    { key: 'github', label: 'GitHub' },
     { key: 'experience', label: 'Experience' },
     { key: 'education', label: 'Education' },
     { key: 'testimonials', label: 'Testimonials' },

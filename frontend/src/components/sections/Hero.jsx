@@ -5,6 +5,7 @@ import Aurora from '../motion/Aurora';
 import GlowButton from '../ui/GlowButton';
 import Marquee from '../motion/Marquee';
 import PortraitPlate from '../ui/PortraitPlate';
+import Tilt from '../motion/Tilt';
 import { EASE } from '../motion/variants';
 
 const FALLBACK = {
@@ -160,12 +161,14 @@ export default function Hero({ hero, tickerItems = [] }) {
                             style={{ y: photoY }}
                             className="mx-auto w-full max-w-[17.5rem] sm:max-w-[19rem] lg:mr-0 lg:ml-auto lg:max-w-[23rem]"
                         >
-                            <PortraitPlate
-                                src={portrait}
-                                alt={`Portrait of ${data.title}`}
-                                delay={0.35}
-                                priority
-                            />
+                            <Tilt className="rounded-[1.75rem]" max={7} sheen={false}>
+                                <PortraitPlate
+                                    src={portrait}
+                                    alt={`Portrait of ${data.title}`}
+                                    delay={0.35}
+                                    priority
+                                />
+                            </Tilt>
                         </motion.div>
                     </div>
                 ) : (

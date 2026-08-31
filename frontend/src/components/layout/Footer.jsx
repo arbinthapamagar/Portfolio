@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { Mail, MapPin, Phone } from 'lucide-react';
 import { Facebook, Github, Instagram, Linkedin, Tiktok, Twitter } from '../ui/BrandIcons';
 import Reveal from '../motion/Reveal';
+import githubAvatar from '../../assets/github-avatar.jpg';
 
 const SOCIALS = [
     { key: 'githubUrl', Icon: Github, label: 'GitHub' },
@@ -13,8 +14,40 @@ const SOCIALS = [
     { key: 'tiktokUrl', Icon: Tiktok, label: 'TikTok' },
 ];
 
-export default function Footer({ footer }) {
+export default function Footer({ footer, photo }) {
     const links = SOCIALS.filter((s) => footer?.[s.key]);
+
+    // the handle is read off the GitHub url rather than written twice
+    const githubUrl = footer?.githubUrl;
+    const handle = githubUrl ? `@${githubUrl.replace(/\/+$/, '').split('/').pop()}` : '';
+
+    const profile = (
+        <>
+            <span className="relative shrink-0">
+                <img
+                    src={photo || githubAvatar}
+                    alt="Arbeen Thapa Magar"
+                    loading="lazy"
+                    className="h-14 w-14 rounded-full border border-white/12 object-cover transition-transform duration-500 group-hover:scale-[1.04]"
+                />
+                {/* same signal the hero opens with, at avatar scale */}
+                <span
+                    aria-hidden="true"
+                    className="absolute -right-0.5 -bottom-0.5 h-4 w-4 rounded-full border-2 border-ink-950 bg-emerald-400"
+                />
+            </span>
+            <span className="min-w-0">
+                {handle && (
+                    <span className="block truncate font-display text-base font-semibold text-mist-100 transition-colors group-hover:text-glow-300">
+                        {handle}
+                    </span>
+                )}
+                <span className="mt-0.5 block font-mono text-[10px] tracking-[0.18em] text-mist-600 uppercase">
+                    {footer?.location || 'Available for work'}
+                </span>
+            </span>
+        </>
+    );
 
     return (
         <footer className="relative overflow-hidden border-t border-white/5 bg-ink-950">
@@ -34,7 +67,22 @@ export default function Footer({ footer }) {
             <div className="relative mx-auto max-w-6xl px-6 py-16">
                 <div className="grid gap-10 md:grid-cols-3">
                     <Reveal>
-                        <p className="font-display text-lg font-semibold">{footer?.tagline}</p>
+                        {/* profile card: the portrait from the about column at avatar
+                            scale, pointing back at the GitHub profile it came from */}
+                        {githubUrl ? (
+                            <a
+                                href={githubUrl}
+                                target="_blank"
+                                rel="noreferrer"
+                                className="group inline-flex items-center gap-4"
+                            >
+                                {profile}
+                            </a>
+                        ) : (
+                            <div className="group inline-flex items-center gap-4">{profile}</div>
+                        )}
+
+                        <p className="mt-5 font-display text-lg font-semibold">{footer?.tagline}</p>
                         <p className="mt-3 max-w-xs text-sm leading-relaxed text-mist-500">
                             Building fast, well-structured web platforms — from REST APIs to the
                             interfaces on top of them.

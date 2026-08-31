@@ -26,7 +26,7 @@ export default function PublicLayout() {
                 </PageTransition>
             </AnimatePresence>
 
-            <Footer footer={data.footer} />
+            <Footer footer={data.footer} photo={data.about?.photo} />
         </div>
     );
 }

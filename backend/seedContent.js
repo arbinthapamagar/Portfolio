@@ -370,6 +370,62 @@ const EXPERIENCE = [
         techStack: 'Laravel, PHP, PostgreSQL, Vue, Docker',
         order: 5,
     },
+
+    /* Administration and documentation roles before the move into development.
+       Periods are intentionally blank until confirmed — a guessed date on a CV
+       is worse than no date. */
+    {
+        title: 'Admin Officer — Documentation',
+        company: 'Kalinchok Manpower',
+        location: 'Kathmandu, Nepal',
+        period: '',
+        description:
+            'A foreign-employment recruitment agency, where every placement is a paper trail: demand letters, labour approvals, medicals, insurance, visas and tickets, each with its own issuing office and its own deadline. I ran the documentation side of that pipeline for outgoing candidates.',
+        highlights: [
+            'Prepared and checked candidate files end to end — passport, contract, medical report, insurance and visa paperwork — before submission, so files were not returned over a missing page.',
+            'Compiled demand letters, job agreements and labour-approval submissions, and tracked each one through to approval rather than filing and hoping.',
+            'Kept the applicant register current — stage, outstanding document, next deadline — so anyone could say where a candidate stood without opening the cabinet.',
+            'Sequenced medical, insurance, embassy and ticketing steps in the order they actually depend on, instead of stalling on a step booked too early.',
+            'Handled the agency\'s routine correspondence and kept the filing system fit for audit and repeat verification requests.',
+        ],
+        techStack: 'Documentation, Correspondence, Record Keeping, MS Excel, MS Word',
+        order: 6,
+    },
+    {
+        title: 'Admin Officer — Quotations & Tenders',
+        company: 'Kalinchok Security Pvt. Ltd.',
+        location: 'Kathmandu, Nepal',
+        period: '',
+        description:
+            'A manned-guarding company that wins its work by bid. I prepared the quotations and tender submissions behind that — costing a deployment, assembling the legal documents a bid has to carry, and getting it in before the deadline closed.',
+        highlights: [
+            'Built service quotations from post counts, shift patterns and duty hours, so a price reflected the deployment it was actually paying for.',
+            'Assembled tender and bid documents — company registration, PAN/VAT, tax clearance, experience certificates and rate sheets — and filed them against published deadlines.',
+            'Tracked tender notices for relevant contracts and flagged the ones worth bidding, closing date attached.',
+            'Maintained client contracts, renewal dates and guard deployment records, and raised monthly invoices from attendance.',
+            'Ran day-to-day office administration: correspondence, filing, and the paperwork that follows a contract once it is won.',
+        ],
+        techStack: 'Tender Preparation, Quotations, Invoicing, Record Keeping, MS Excel',
+        order: 7,
+    },
+    {
+        title: 'Outsourcing & Admin Assistant',
+        company: 'Sherpa Adventure Gear',
+        companyUrl: 'https://www.sherpaadventuregear.com/',
+        location: 'Kathmandu, Nepal',
+        period: '',
+        description:
+            'An outdoor-apparel manufacturer whose production leans on outside vendors for printing, embroidery, washing and knitting. My job was the ledger between the factory and those vendors: what went out, what came back, and whether the two agreed.',
+        highlights: [
+            'Raised job orders to outsourcing vendors and issued materials against them, so nothing left the floor without a record attached.',
+            'Reconciled issue and return quantities per job on receipt, catching shortages and excess at delivery instead of at month end.',
+            'Followed vendor delivery schedules and escalated slipping jobs while production could still be resequenced around them.',
+            'Checked vendor bills against received quantities and agreed rates before passing them for payment.',
+            'Kept the outsourcing records and status reports that production and accounts both worked from.',
+        ],
+        techStack: 'Vendor Coordination, Inventory Records, Reconciliation, Reporting, MS Excel',
+        order: 8,
+    },
 ];
 
 const EDUCATION = [
